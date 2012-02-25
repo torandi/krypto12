@@ -42,7 +42,7 @@ key_len_range.each do |keylen|
 
   printf("Row\t ioc \t");
   (0..alphabet.length-1).each do |a|
-    printf("%5d ", a)
+    printf("%2d:%c  ", a, alphabet[a])
   end 
   printf("\n")
 

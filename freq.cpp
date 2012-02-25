@@ -1,18 +1,41 @@
+/*
+ * A small c++ program that performs frequency analysis of an input text
+ * Usage:
+ * ./freq input_file
+ */
+
+/****
+ * Settings
+ ***/
+
+// Set to true to ignore newlines from input
+bool ignore_newline = true;
+
+//Threat space as space (that is, reset {bi,tri}gram count and don't count frequency)
+bool space_is_space = false;
+// False: Print stats in numbers, True: print stats in "histogram form"
+bool print_columns = false;
+
+//Thresholds for {single_char, bigram, trigram}
+
+//Ignore all combinations with less that this number of hits
+int count_th[] = {0, 20, 20}; 
+//Ignore all combinations with less frequency than
+float freq_th[] = {0, 0.01, 0.01};
+
+//Scale the histogram by this numbers
+int percent_scale[] = {1, 5, 10};
+
+/***
+ * End settings
+ ***/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <map>
 #include <string>
 #include <set>
 using namespace std;
-
-bool ignore_newline = true;
-bool space_is_space = false; //We know space is space
-bool print_columns = false;
-//Thresholds
-int count_th[] = {0, 20, 20}; 
-float freq_th[] = {0, 0.01, 0.01};
-
-int percent_scale[] = {1, 5, 10};
 
 
 struct freq_pair {
@@ -87,7 +110,7 @@ int main(int argc, char * argv[]) {
 	//Output
 	multiset<freq_pair>::reverse_iterator it;
 	for(int i=0; i<3; ++i) {
-		printf("%d combinations at level %d\n", counts[i], i);
+		printf("======= level %d\n ===========", i);
 		for(it=frequences[i].rbegin(); it!=frequences[i].rend(); ++it) {
 			float percent = ((float)it->freq/(float)counts[i])*100.0;
 			if(it->freq >= count_th[i] && percent >= freq_th[i]) {

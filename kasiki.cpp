@@ -1,17 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <set>
 #include <map>
 #include <string>
+#include <utility>
 using namespace std;
 
 bool ignore_newline = true;
 
+int d_max = 200;
+
 int main(int argc, char * argv[]) {
-	set<int> distances;
+	map<int,int> distances;
 	map<string, int> last_pos;
 	map<string, int>::iterator lp_it;
-	set<int>::iterator d_it;
+	map<int, int>::iterator d_it;
 
 	if(argc < 2) {
 		printf("Missing argument (file)\n");
@@ -41,7 +43,14 @@ int main(int argc, char * argv[]) {
 			if(lp_it != last_pos.end()) {
 				//Hit!
 				int d = count-lp_it->second;
-				distances.insert(d); //Insert found distance
+            if(d <= d_max) {
+              d_it = distances.find(d);
+              if(d_it == distances.end()) {
+                distances[d] = 1;
+              } else {
+                d_it->second++;
+              }
+            }
 			} else {
 				//New combination
 				last_pos[cur] = count;
@@ -51,9 +60,9 @@ int main(int argc, char * argv[]) {
 	fclose(in);
 
 	//Print result:
-	printf("Found following distances:\n");
+	printf("Found following distances: (distance, hit count)\n");
 	for(d_it = distances.begin(); d_it!=distances.end(); ++d_it) {
-		printf("%d, ",*d_it);	
+		printf("(%d: %d), ",d_it->first, d_it->second);	
 	}
 	printf("\n");
 }

@@ -60,6 +60,7 @@ key_len_range.each do |keylen|
     if calc_prob_distribution 
       best_val = 0
       best_let = ""
+      green_let = ""
       (0..alphabet.length-1).each do |g|
         mg = 0.0
         (0..alphabet.length-1).each do |i| 
@@ -73,6 +74,7 @@ key_len_range.each do |keylen|
         end
         output = "%.3f"
         if mg > green_th
+          green_let+= alphabet[g]
           output = output.colorize(:green)
         elsif mg > yellow_th
           output = output.colorize(:yellow)
@@ -80,7 +82,7 @@ key_len_range.each do |keylen|
         printf("#{output} ", mg);
       end
       key+=best_let
-      printf("\t%c", best_let)
+      printf("\t%c\t%s", best_let,green_let)
     end
     printf("\n")
   end

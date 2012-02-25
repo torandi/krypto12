@@ -14,7 +14,7 @@ bool ignore_newline = true;
 //Threat space as space (that is, reset {bi,tri}gram count and don't count frequency)
 bool space_is_space = false;
 // False: Print stats in numbers, True: print stats in "histogram form"
-bool print_columns = false;
+bool print_columns = true;
 
 //Thresholds for {single_char, bigram, trigram}
 

@@ -12,8 +12,8 @@
 # SETTINGS
 #####
 
-#key_range = (0..0x7f) # Try all keys
-key_range = [0x6e]     # Run with one key only
+key_range = (0..0x7f) # Try all keys
+#key_range = [0x6e]     # Run with one key only
 
 # One-to-one replacement map
 replace_map = {

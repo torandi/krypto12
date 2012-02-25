@@ -7,13 +7,13 @@
 # SETTINGS
 #####
 
-#key_len_range = (1..18)
-key_len_range = [18]
+key_len_range = (1..18)
+#key_len_range = [18]
 
 alphabet = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ_"
 
 # Set to true to calculate probability distrubution for each key combination and try to guess the key
-calc_prob_distribution = true
+calc_prob_distribution = false
 
 # Threashold for coloring probability distrubution
 green_th = 0.05

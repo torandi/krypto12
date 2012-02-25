@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.1415926-2.2-0.9995.2 (TeX Live 2009/Debian) (format=xelatex 2011.10.26)  25 FEB 2012 19:58
+This is XeTeX, Version 3.1415926-2.2-0.9995.2 (TeX Live 2009/Debian) (format=xelatex 2011.10.26)  25 FEB 2012 21:25
 entering extended mode
  %&-line parsing enabled.
 **homeworkA.tex
@@ -127,17 +127,37 @@ LaTeX Font Info:    ... okay on input line 15.
 \c@lstlisting=\count97
 [1
 
-] (./krypto12Aplaintext.txt [2
+]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 22.
+ (/usr/share/texmf-texlive/tex/latex/base/omscmr.fd
+File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 22.
+ [2
 
 
-]) [3] (./homeworkA.aux) ) 
+]
+(./krypto12Aplaintext.txt) [3]
+Underfull \hbox (badness 10000) in paragraph at lines 57--58
+
+ []
+
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <10.95> on input line 58.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 58.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 58.
+[4] (./krypto12B_plaintext) [5] (./krypto12C_plaintext [6]) [7]
+(./homeworkA.aux) ) 
 Here is how much of TeX's memory you used:
- 2337 strings out of 494665
- 30478 string characters out of 1166476
- 192659 words of memory out of 3000000
- 5584 multiletter control sequences out of 15000+50000
- 10027 words of font info for 23 fonts, out of 3000000 for 9000
+ 2377 strings out of 494665
+ 31072 string characters out of 1166476
+ 177659 words of memory out of 3000000
+ 5609 multiletter control sequences out of 15000+50000
+ 12466 words of font info for 31 fonts, out of 3000000 for 9000
  669 hyphenation exceptions out of 8191
- 32i,7n,32p,335b,1408s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 32i,7n,32p,741b,1408s stack positions out of 5000i,500n,10000p,200000b,50000s
 
-Output written on homeworkA.pdf (3 pages).
+Output written on homeworkA.pdf (7 pages).

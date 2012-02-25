@@ -17,7 +17,7 @@
 
 	\section{}
 		\subsection{Program}
-			De programmen som jag har skrivit för denna uppgift är följande (i bokstavsordning). Samtliga ruby program är skrivna för ruby 1.9.2.
+			De programmen som jag har skrivit för denna uppgift är följande (i bokstavsordning). Samtliga ruby-program är skrivna för ruby 1.9.2.
 			\begin{itemize}
 				\item \textbf{coincidence.rb}	\\
 					Beräknar index of coincidence i given fil med varierande nyckellängd och kan även per rad testa alla kombinationer av nycklar per tecken i nyckeln och därmed beräkna hur nära texten i raden ligger engelska. Genom detta kan den äver föreslå en nyckel.\\
@@ -33,12 +33,13 @@
 				\item \textbf{kasiki.cpp}	\\
 					Räknar avstånd mellan återkommande textsegment av längd tre och sparar avstånd och antal förkomster av avståndet.
 			\end{itemize}
+
 		\subsection{Skiffer A}
 			\subsubsection{Metod}
 			Det första steget var att utföra frekvensanalys på skiffertexten. För detta använde jag programmet freq.cpp för att 
 			ta fram både siffror och histogram på frekvensen av tecken, bigram och trigram.
 
-			Vid en första anblick av resultatet av frekvensanalysen ser man att W är klart vanligast. Dessutom ser man på fördelningen över tecknena att det tycks vara ett monoalfabetiskt substitutionsskiffer..
+			Vid en första anblick av resultatet av frekvensanalysen ser man att W är klart vanligast. Dessutom ser man på fördelningen över tecknena att det tycks vara ett monoalfabetiskt substitutionsskiffer.
 			
 			E är visserligen den vanligaste bokstaven i engelska språket, men vid en analys av hur W är utplacerat i texten ser man snabbt att W är mellanrum. 
 
@@ -47,4 +48,34 @@
 			\subsubsection{Klartext}
 				\lstinputlisting[breaklines]{krypto12Aplaintext.txt}
 
+		\subsection{Skiffer B}
+			\subsubsection{Metod}
+			Började åter igen med frekvensanalys (freq.cpp), men kunde utifrån den se att distributionen över alfabetet var för jämn, vilket tydde på ett polyalfabetiskt skiffer, med stor sannolikhet Vigenères skiffer. 
+
+			Jag körde därmed kasiki.cpp och hittade att avstånden 18, 36 och 54 alla förkom relativt ofta. Deras gemensamma nämnare är 18, och alltså gissade jag på att detta var nyckellängden m. 
+
+			För att verifiera detta körde jag först coincidence.rb med nyckellängder 1 till 18 utan att testa nyckelkombinationer (calc\_prob\_distribution = false i koden). Med detta kunde jag verifiera att siffrorna för nyckellängd 18 låg närmast 0.068 (värdet för engelsk text). Koden beräknar index of coincidence enligt följande formel (från kursboken): \\
+			$$ I_c(x) = \frac{\sum_{i=0}^{28} f_i(f_i-1)}{n(n-1)} $$
+			Där $x=x_1, x_2, ..., x_n$ är en sträng och $f_i$ är frekvensen av tecken i. 28 är längden på alfabetet (engelska alfabetet plus \# och \_).
+
+			När jag nu har verifierat nyckellängden (m = 18) är det dags att försöka hitta nyckeln. För att göra detta använder jag åter coincidence.rb, men denna gång med en fast nyckellängd och koden för att testa nyckelkombinationer på.
+			Den listar för varje tecken i nyckeln (dvs varje ''rad'') $M_g$, som närmare sig 0.068 om det är rätt. 
+			$$ M_g = \sum_{i=0}^{28} \frac{p_i*f_{(i+g) mod 28}}{n'} $$
+			Där $n'$ är antalet tecken som påverkas av nyckelpositionen och $p_i$ är den ideala distributionen för tecken $i$. $g$ är den nuvarande skiftningen som prövas.
+
+			Genom att välja ut de $g$ med högst $M_g$ föreslår programmet sen en nyckel. Jag använder därefter decrypt.rb för att dekryptera skifret med nyckeln. Detta gav relativt bra resultat, men texten var fortfarande hyfsat oläslig. Genom att be programmet att göra radbrytning efter varje nyckellängd kunde jag lätt identifiera i vilka positioner det var fel, och genom att hitta vanliga ord som AND och THE kunde jag räkna ut hur mycket nyckeln borde ändras i den positionen. Genom att systematiskt applicera detta kom jag fram till nyckeln: \\
+DLTAHPXDLTHLPTXADH
+	
+			\subsubsection{Klartext}
+				\lstinputlisting[breaklines]{krypto12B_plaintext}
+		
+		\subsection{Skiffer C}
+			\subsubsection{Metod}
+			När jag såg skifferalfabetet var det tämligen uppenbart att siffrorna i par av två var hexidecimala tal. Det rimligaste sättet att tolka hexidecimala tal är som ascii.
+			Mitt första försök var därmed m.h.a hex\_to\_ascii.rb läsa filen två tecken i taget och skriva ut ascii. Detta gav som väntat inte någon klartext. Jag lät därefter koden testa att förskjuta alla tecken med alla tal i mängden 0 till 0x7f modulus 0x7f. Utdatan från detta sparade jag i en fil i vilken jag sedan sökte efter "the". Jag hitade två nycklar som verkade rimliga, 0x4e och 0x6e. Avståndet mellan dessa två är 0x20, vilket är avståndet mellan A och a i ascii-tabellen. 0x6e verkade dock som en mycket rimligare nyckel då utdatan blev nästan klartext med både stora och små bokstäver.
+
+			Efter detta hade jag alltså nästan klartext, dock hade texten den egenheten att o och O hade bytts ut med \_ och ? (och vise versa). Jag vet inte om detta berodde på att min avkryptering gjorde något litet fel, eller om det faktiskt skulle vara så. Ett sådant fel kan lätt ha uppstått på grund av att roteringen kring ändarna inte fungerade perfekt. Hur som helst fick jag ändå fram klartexten genom att helt enkelt göra det utbyte i efterhand.
+
+			\subsubsection{Klartext}
+				\lstinputlisting[breaklines]{krypto12C_plaintext}
 \end{document}

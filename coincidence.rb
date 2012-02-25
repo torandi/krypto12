@@ -2,7 +2,7 @@
 # SETTINGS
 #####
 
-key_len_range = (1..9)
+key_len_range = (1..18)
 #key_len_range = [3]
 
 alphabet = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ_"
@@ -18,12 +18,13 @@ data = f.read
 key_len_range.each do |keylen|
   puts "Coincidence indices for key length #{keylen}"
   # Array of freq for each letter in the key
-  freq_per_row = Array.new(keylen, Array.new(alphabet.length, 0)) 
+  freq_per_row = Array.new(keylen) {|i| Array.new(alphabet.length, 0) }
   pos = 0
   data.each_char do |c|
     alphabet_index = alphabet.index c
     if alphabet_index
-      freq_per_row[pos%keylen][alphabet_index]+=1;
+      row = pos%keylen
+      freq_per_row[row][alphabet_index]+=1;
       pos+=1
     end
   end

@@ -1,3 +1,9 @@
+/**
+ *  Calculates kasiki distances in input file
+ *  Usage: ./kasiki input_file
+ * Author: Andreas Tarandi - taran at kth dot se
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <map>

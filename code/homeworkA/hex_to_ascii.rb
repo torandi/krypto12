@@ -4,6 +4,9 @@
 #
 # It can apply a range of single character keys 
 # and finally perform one-to-one replacement of characters in the decoded output
+#
+# Usage: ruby hex_to_ascii.rb input_file
+# Author: Andreas Tarandi - taran at kth dot se
 
 #####
 # SETTINGS

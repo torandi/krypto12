@@ -2,6 +2,7 @@
  * A small c++ program that performs frequency analysis of an input text
  * Usage:
  * ./freq input_file
+ * Author: Andreas Tarandi - taran at kth dot se
  */
 
 /****

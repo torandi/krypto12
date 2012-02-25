@@ -1,3 +1,9 @@
+##
+# This program decrypts a given input with a given key
+# Usage: ruby decrypt.rb input_file key
+# Author: Andreas Tarandi - taran at kth dot se
+
+
 #####
 # SETTINGS
 #####

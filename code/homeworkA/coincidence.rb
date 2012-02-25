@@ -1,3 +1,8 @@
+##
+# This program calculates the index of coincidence and related data
+# Usage: ruby coincidence.rb input_file
+# Author: Andreas Tarandi - taran at kth dot se
+
 #####
 # SETTINGS
 #####

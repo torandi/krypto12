@@ -1,5 +1,8 @@
-# Numbers from Table 1.1 in Cryptography - Thery and practice - Third Edition
+##
+# Exports $english_p containing probability for all enlish letter
+# Author: Andreas Tarandi - taran at kth dot se
 
+# Numbers from Table 1.1 in Cryptography - Thery and practice - Third Edition by D.R. Stinson
 $english_p = {
   "A" => 0.082,
   "B" => 0.015,

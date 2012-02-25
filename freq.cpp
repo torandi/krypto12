@@ -21,7 +21,7 @@ bool print_columns = false;
 //Ignore all combinations with less that this number of hits
 int count_th[] = {0, 20, 20}; 
 //Ignore all combinations with less frequency than
-float freq_th[] = {0, 0.01, 0.01};
+float freq_th[] = {0, 0.001, 0.001};
 
 //Scale the histogram by this numbers
 int percent_scale[] = {1, 5, 10};
@@ -110,18 +110,18 @@ int main(int argc, char * argv[]) {
 	//Output
 	multiset<freq_pair>::reverse_iterator it;
 	for(int i=0; i<3; ++i) {
-		printf("======= level %d\n ===========", i);
+		printf("======= level %d ===========\n", i);
 		for(it=frequences[i].rbegin(); it!=frequences[i].rend(); ++it) {
-			float percent = ((float)it->freq/(float)counts[i])*100.0;
-			if(it->freq >= count_th[i] && percent >= freq_th[i]) {
+			float freq = ((float)it->freq/(float)counts[i]);
+			if(it->freq >= count_th[i] && freq >= freq_th[i]) {
 				printf("%s:",it->str.c_str());
 				if(print_columns) {
-					for(int n = 0;n<percent*percent_scale[i];++n) {
+					for(int n = 0;n<freq*100.0*percent_scale[i];++n) {
 						printf("#");
 					}
 					printf("\n");
 				} else {
-					printf(" %.2f%%, %d hits \n", percent, it->freq);
+					printf(" freq: %.2f, num hits: %d\n", freq, it->freq);
 				}
 			}
 		}

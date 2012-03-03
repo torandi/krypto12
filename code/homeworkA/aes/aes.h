@@ -1,14 +1,11 @@
 #ifndef AES_H
 #define AES_H
 
-#define NUM_ROUNDS 10
-
 struct aes_t {
 	//Key
 	char key[16];
 
-	//Round keys
-	char round_keys[NUM_ROUNDS][16];
+	char expanded_key[16*11];
 
 	char iv[16]; //The current value. Can be: plaintext (input), ciphertext(output) or intermediate value
 };

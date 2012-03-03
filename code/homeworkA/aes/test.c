@@ -45,7 +45,8 @@ int main() {
 				sprintf(hex1, "000102030405060708090a0b0c0d0e0f");
 				string_to_data(hex1, aes.key);
 				aes_expand_key(&aes);
-				const char round_keys[10][32] = {
+				const char round_keys[11][32] = {
+					"000102030405060708090a0b0c0d0e0f",
 					"d6aa74fdd2af72fadaa678f1d6ab76fe",
 					"b692cf0b643dbdf1be9bc5006830b3fe",
 					"b6ff744ed2c2c9bf6c590cbf0469bf41",
@@ -58,10 +59,10 @@ int main() {
 					"13111d7fe3944a17f307a78b4d2b30c5"
 				};
 				char test_name[32];
-				for(i=0;i<10;++i) {
+				for(i=0;i<11;++i) {
 					sprintf(test_name, "Round %d", i+1);
 					begin_test(test_name);
-					data_to_string(aes.round_keys[i], hex1);
+					data_to_string(aes.expanded_key+(i*16), hex1);
 					assert_strings_equal_n(hex1, round_keys[i], 32);
 				}
 			}

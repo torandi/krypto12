@@ -20,6 +20,9 @@ void data_to_string(const char data[16], char target[32]) {
 	}
 }
 
-void aes_key_expansion(struct aes_t * aes) {
-
+void aes_expand_key(struct aes_t * aes) {
+	int i;
+	for(i=0;i<10;++i) {
+		
+	}
 }

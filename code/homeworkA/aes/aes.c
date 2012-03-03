@@ -30,8 +30,8 @@ void aes_expand_key(struct aes_t * aes) {
 	for(i=4;i< 4*11;++i) {
 		temp = aes->expanded_key[i-1]; //Previous key column
 		if(i % 4 == 0) { //Start of new round key
-			temp = aes_sub_bytes_word(aes_rot(temp)) ^ ( rcon[i/4] << 24); 
-		}
+			temp = aes_sub_bytes_word(aes_rot(temp)) ^ ( ((uint32_t)rcon[i/4]) << 24); 
+		} 
 		aes->expanded_key[i] = aes->expanded_key[i-4] ^ temp; 
 	}
 }

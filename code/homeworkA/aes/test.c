@@ -54,7 +54,7 @@ int main() {
 			assert_ints_equal( aes_rot(0x1A<<24), 0x1a);
 		end_context();
 
-		begin_context("aes_sbox");
+		begin_context("aes_sub_bytes");
 			{
 				const char sbox_test_values[][32] = {
 					"00102030405060708090a0b0c0d0e0f0", "63cab7040953d051cd60e0e7ba70e18c",
@@ -66,7 +66,7 @@ int main() {
 				};
 				char test_name[32];
 				for(i=0;i<6; ++i) {
-					sprintf(test_name, "S-BOX Run %d", i+1);
+					sprintf(test_name, "SubBytes Run %d", i+1);
 					begin_test(test_name);
 					string_to_data(sbox_test_values[i*2], aes.iv);
 					aes_sbox(aes.iv);
@@ -76,33 +76,11 @@ int main() {
 			}
 		end_context();
 
-		begin_context("Key Expansion With all zeroes");
-			{
-				sprintf(hex1, "00000000000000000000000000000000");
-				string_to_data(hex1, aes.key);
-				aes_expand_key(&aes);
-				const char round_keys[11][32] = {
-					"80000000000000000000000000000000",
-					"40000000000000000000000000000000",
-					"20000000000000000000000000000000",
-					"00000000000000000000000000000000",
-					"00000000000000000000000000000000",
-					"00000000000000000000000000000000",
-					"00000000000000000000000000000000",
-					"00000000000000000000000000000000",
-					"00000000000000000000000000000000",
-					"00000000000000000000000000000000",
-					"00000000000000000000000000000000"
-				};
-				char test_name[32];
-				for(i=0;i<11;++i) {
-					sprintf(test_name, "Round %d", i+1);
-					begin_test(test_name);
-					data_to_string(aes.expanded_key+(i*16), hex1);
-					assert_strings_equal_n(hex1, round_keys[i], 32);
-				}
-			}
-		begin_context("Key Expansion with complex key");
+		sprintf(hex1, "2b7e151628aed2a6abf7158809cf4f3c");
+		string_to_data(hex1, aes.key);
+		aes_expand_key(&aes);
+
+		begin_context("Round keys");
 			{
 				sprintf(hex1, "000102030405060708090a0b0c0d0e0f");
 				string_to_data(hex1, aes.key);
@@ -124,7 +102,7 @@ int main() {
 				for(i=0;i<11;++i) {
 					sprintf(test_name, "Round %d", i+1);
 					begin_test(test_name);
-					data_to_string(aes.expanded_key+(i*16), hex1);
+					data_to_string(aes.expanded_key+(i*4), hex1);
 					assert_strings_equal_n(hex1, round_keys[i], 32);
 				}
 			}

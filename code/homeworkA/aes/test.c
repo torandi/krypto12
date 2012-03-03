@@ -24,8 +24,8 @@ int main() {
 			string_to_data(hex1, aes.key);
 			data_to_string(aes.key, hex2);
 			assert_strings_equal_n(hex1, hex2,32);
-			for(i=0;i<16; ++i) {
-				assert_ints_equal(aes.key[i], 1);
+			for(i=0;i<4; ++i) {
+				assert_ints_equal(aes.key[i], 0x01010101);
 			}
 
 			begin_test("ffffffffffffffffffffffffffffffffff");
@@ -33,8 +33,8 @@ int main() {
 			string_to_data(hex1, aes.key);
 			data_to_string(aes.key, hex2);
 			assert_strings_equal_n(hex1, hex2,32);
-			for(i=0;i<16; ++i) {
-				assert_true(aes.key[i]==(char)0xff);
+			for(i=0;i<4; ++i) {
+				assert_ints_equal(aes.key[i], 0xffffffff);
 			}
 
 

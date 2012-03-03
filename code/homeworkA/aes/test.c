@@ -37,6 +37,12 @@ int main() {
 				assert_ints_equal(aes.key[i], 0xffffffff);
 			}
 
+			begin_test("000102030405060708090a0b0c0d0e0f");
+			sprintf(hex1, "000102030405060708090a0b0c0d0e0f");
+			string_to_data(hex1, aes.key);
+			data_to_string(aes.key, hex2);
+			assert_strings_equal_n(hex1, hex2,32);
+
 
 		end_context();
 
@@ -46,10 +52,57 @@ int main() {
 
 			begin_test("Word = (0x1A in msb)");
 			assert_ints_equal( aes_rot(0x1A<<24), 0x1a);
-
 		end_context();
 
-		begin_context("Key Expansion");
+		begin_context("aes_sbox");
+			{
+				const char sbox_test_values[][32] = {
+					"00102030405060708090a0b0c0d0e0f0", "63cab7040953d051cd60e0e7ba70e18c",
+					"89d810e8855ace682d1843d8cb128fe4", "a761ca9b97be8b45d8ad1a611fc97369",
+					"4915598f55e5d7a0daca94fa1f0a63f7", "3b59cb73fcd90ee05774222dc067fb68",
+					"fa636a2825b339c940668a3157244d17", "2dfb02343f6d12dd09337ec75b36e3f0", 
+					"247240236966b3fa6ed2753288425b6c", "36400926f9336d2d9fb59d23c42c3950",
+					"c81677bc9b7ac93b25027992b0261996", "e847f56514dadde23f77b64fe7f7d490"
+				};
+				char test_name[32];
+				for(i=0;i<6; ++i) {
+					sprintf(test_name, "S-BOX Run %d", i+1);
+					begin_test(test_name);
+					string_to_data(sbox_test_values[i*2], aes.iv);
+					aes_sbox(aes.iv);
+					data_to_string(aes.iv, hex1);
+					assert_strings_equal_n(hex1,sbox_test_values[i*2+1] , 32);
+				}
+			}
+		end_context();
+
+		begin_context("Key Expansion With all zeroes");
+			{
+				sprintf(hex1, "00000000000000000000000000000000");
+				string_to_data(hex1, aes.key);
+				aes_expand_key(&aes);
+				const char round_keys[11][32] = {
+					"80000000000000000000000000000000",
+					"40000000000000000000000000000000",
+					"20000000000000000000000000000000",
+					"00000000000000000000000000000000",
+					"00000000000000000000000000000000",
+					"00000000000000000000000000000000",
+					"00000000000000000000000000000000",
+					"00000000000000000000000000000000",
+					"00000000000000000000000000000000",
+					"00000000000000000000000000000000",
+					"00000000000000000000000000000000"
+				};
+				char test_name[32];
+				for(i=0;i<11;++i) {
+					sprintf(test_name, "Round %d", i+1);
+					begin_test(test_name);
+					data_to_string(aes.expanded_key+(i*16), hex1);
+					assert_strings_equal_n(hex1, round_keys[i], 32);
+				}
+			}
+		begin_context("Key Expansion with complex key");
 			{
 				sprintf(hex1, "000102030405060708090a0b0c0d0e0f");
 				string_to_data(hex1, aes.key);

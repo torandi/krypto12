@@ -16,5 +16,6 @@ void aes_expand_key(struct aes_t * aes);
 void aes_run_round(int round, struct aes_t * aes);
 
 uint32_t aes_rot(uint32_t word);
+void aes_sbox(uint32_t iv[4]);
 
 #endif

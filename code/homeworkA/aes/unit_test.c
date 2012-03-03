@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <string.h>
 #include "unit_test.h"
+#include "sh_colors.h"
 
 static int success_tests = 0;
 static int total_tests = 0;
@@ -35,6 +36,8 @@ void begin_test_suite() {
 	if(active_test_suite == 1) {
 		fprintf(stderr, "Test suite already active!\n");
 		assert(0);
+	} else {
+		printf("============= BEGIN TEST SUITE ===============\n\n");
 	}
 	success_tests = 0;
 	total_tests = 0;
@@ -45,12 +48,16 @@ int  end_test_suite() {
 	assert_active_test_suite();
 	active_test_suite = 0;
 	const char * status;
+	printf("\n============= END TEST SUITE ===============\n");
 	if(success_tests == total_tests) {
 		status = "succeeded";
+		color(SH_FG_GREEN);
 	} else {
 		status = "failed";
+		color(SH_FG_RED);
 	}
-	printf("\nTest suite %s. Succesive tests: %d/%d\n", status, success_tests, total_tests);
+	printf("Test suite %s. Succesive tests: %d/%d\n", status, success_tests, total_tests);
+	reset_color();
 	return (success_tests == total_tests);
 }
 
@@ -68,6 +75,7 @@ int  end_context() {
 
 	end_test();
 
+	printf("==============================\n");
 	printf("Result for %s: %d/%d successfull tests\n", current_context, context_success, context_tests);
 	return (context_success == context_tests);
 }
@@ -92,6 +100,9 @@ int end_test() {
 			++context_success;
 			++success_tests;
 			test_status = -1; //Inactivate
+			color(SH_FG_GREEN);
+			printf("Test %s: OK\n", current_test);
+			reset_color();
 			return 1;
 		} else {
 			test_status = -1;
@@ -108,9 +119,12 @@ static void core_assert(int expr, const char * error_msg) {
 	assert_active_test();
 	if(test_status == 0) {
 		if(expr == 0) {
-			printf("Test %s failed: Expected %s\n", current_test, error_msg);
+			color(SH_FG_RED);
+			printf("Test %s: FAIL. Expected %s\n", current_test, error_msg);
+			test_status=1;
+			reset_color();
 		}
-	}
+	} 
 }
 
 void assert_true(int expr) {
@@ -133,17 +147,27 @@ void assert_lt(int v1, int v2) {
 	core_assert((v1<v2), msg);
 }
 
-void assert_equal_strings(const char * str1, const char * str2) {
+void assert_strings_equal(const char * str1, const char * str2) {
 	char msg[128];
 	if(strlen(str1)+strlen(str2) < 100) {
-		sprintf(msg, "\"%s\"to be equal to \"%s\"", str1, str2); 
+		sprintf(msg, "\"%s\" to be equal to \"%s\"", str1, str2); 
 	} else {
 		sprintf(msg, "strings to be equal");
 	}
 	core_assert((strcmp(str1, str2)==0), msg);
 }
 
-void assert_equal_ints(int i1, int i2) {
+void assert_strings_equal_n(const char * str1, const char * str2, int n) {
+	char msg[128];
+	if(2*n < 100) {
+		sprintf(msg, "\"%.*s\" to be equal to \"%.*s\"", n,str1,n, str2); 
+	} else {
+		sprintf(msg, "strings to be equal");
+	}
+	core_assert((strncmp(str1, str2, n)==0), msg);
+}
+
+void assert_ints_equal(int i1, int i2) {
 	char msg[128];
 	sprintf(msg, "%d to be equal to %d", i1, i2); 
 	core_assert((i1==i2), msg);

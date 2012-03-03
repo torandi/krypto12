@@ -40,6 +40,15 @@ int main() {
 
 		end_context();
 
+		begin_context("aes_rot");
+			begin_test("Word = 0");
+			assert_ints_equal(aes_rot(0), 0);
+
+			begin_test("Word = (0x1A in msb)");
+			assert_ints_equal( aes_rot(0x1A<<24), 0x1a);
+
+		end_context();
+
 		begin_context("Key Expansion");
 			{
 				sprintf(hex1, "000102030405060708090a0b0c0d0e0f");

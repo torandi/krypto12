@@ -4,6 +4,7 @@
 
 #include "aes.h"
 
+static uint32_t aes_sub_bytes_word(uint32_t word);
 
 void string_to_data(const char input[32], uint32_t * target) {
 	int i;
@@ -28,8 +29,15 @@ void aes_expand_key(struct aes_t * aes) {
 	for(i=4;i< 4*11;++i) {
 		temp = aes->expanded_key[i-1]; //Previous key column
 		if(i % 4 == 0) { //Start of new round key
-			//temp = aes_sub_byte(aes_rot_byte(temp)) ^ ( rcon[i/4] << 12);
+			//temp = aes_sub_bytes(aes_rot(temp)) ^ ( rcon[i/4] << 24); 
 		}
 		aes->expanded_key[i] = aes->expanded_key[i-4] ^ temp; 
 	}
+}
+
+/**
+ * Rotate word (a, b, c, d) to (b, c, d, a)
+ */
+uint32_t aes_rot(uint32_t word) {
+	return ( (word << 8) & 0xffffff00) ^ ((word >> 24) & 0xff);
 }

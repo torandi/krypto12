@@ -61,3 +61,20 @@ void aes_sbox(uint32_t iv[4]) {
 		iv[i] = aes_sub_bytes_word(iv[i]);
 	}
 }
+
+void aes_sub_bytes(struct aes_t * aes) {
+	aes_sbox(aes->iv);
+}
+
+void aes_shift_rows(struct aes_t * aes) {
+}
+
+void aes_mix_columns(struct aes_t * aes) {
+}
+
+void aes_add_round_key(struct aes_t  * aes, int round) {
+	aes->iv[0] ^= aes->expanded_key[4*round];
+	aes->iv[1] ^= aes->expanded_key[4*round+1];
+	aes->iv[2] ^= aes->expanded_key[4*round+2];
+	aes->iv[3] ^= aes->expanded_key[4*round+3];
+}

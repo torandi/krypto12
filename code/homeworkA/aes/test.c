@@ -4,12 +4,17 @@
 #include "aes.h"
 #include "unit_test.h"
 
+#include "test_data.h"
+
 int main() {
 	char hex1[32] = "00000000000000000000000000000000";
 	char hex2[32];
 	int i=0;
 
 	struct aes_t aes;
+
+	struct round_t test_round[10];
+	build_test_round(test_round);
 
 	//Execute test:
 	begin_test_suite();
@@ -76,10 +81,6 @@ int main() {
 			}
 		end_context();
 
-		sprintf(hex1, "2b7e151628aed2a6abf7158809cf4f3c");
-		string_to_data(hex1, aes.key);
-		aes_expand_key(&aes);
-
 		begin_context("Round keys");
 			{
 				sprintf(hex1, "000102030405060708090a0b0c0d0e0f");
@@ -106,6 +107,69 @@ int main() {
 					assert_strings_equal_n(hex1, round_keys[i], 32);
 				}
 			}
+		end_context();
+
+		begin_context("AES Step through");
+			string_to_data(test_key, aes.key);
+			string_to_data(test_plaintext, aes.iv);
+
+			aes_expand_key(&aes);
+
+			aes_add_round_key(&aes, 0);
+
+			begin_test("PreRound: AddRoundKey");
+			data_to_string(aes.iv, hex1);
+			assert_strings_equal_n(hex1, test_round[0].start, 32);
+
+			char test_name[32];
+			for(i = 0; i<10; ++i) {
+				//Key Expansion
+				
+				sprintf(test_name, "Round %d: Verify round key", i+1);
+				begin_test(test_name);
+				data_to_string(aes.expanded_key+i*4, hex1);
+				assert_strings_equal_n(hex1, test_round[i].k_sch, 32);
+
+
+				//SubBytes
+				string_to_data(test_round[i].start, aes.iv); //Reset iv to start
+				sprintf(test_name, "Round %d: SubBytes", i+1);
+				begin_test(test_name);
+				aes_sub_bytes(&aes);
+				data_to_string(aes.iv, hex1);
+				assert_strings_equal_n(hex1, test_round[i].s_box, 32);
+				string_to_data(test_round[i].s_box, aes.iv); //Reset iv to prevent error propagation
+
+				//ShiftRows
+				sprintf(test_name, "Round %d: ShiftRows", i+1);
+				begin_test(test_name);
+				aes_shift_rows(&aes);
+				data_to_string(aes.iv, hex1);
+				assert_strings_equal_n(hex1, test_round[i].s_row, 32);
+				string_to_data(test_round[i].s_row, aes.iv); //Reset iv to prevent error propagation
+
+				if(i != 9) {
+					//MixColumns
+					sprintf(test_name, "Round %d: MixColumns", i+1);
+					begin_test(test_name);
+					aes_mix_columns(&aes);
+					data_to_string(aes.iv, hex1);
+					assert_strings_equal_n(hex1, test_round[i].m_col, 32);
+					string_to_data(test_round[i].m_col, aes.iv); //Reset iv to prevent error propagation
+				}
+
+				//AddRoundKey
+				sprintf(test_name, "Round %d: AddRoundKey", i+1);
+				begin_test(test_name);
+				aes_add_round_key(&aes,i+1);
+				data_to_string(aes.iv, hex1);
+				if(i != 9)
+					assert_strings_equal_n(hex1, test_round[i+1].start, 32);
+				else
+					assert_strings_equal_n(hex1, test_output, 32);
+
+			}
+			
 		end_context();
 	end_test_suite();
 }

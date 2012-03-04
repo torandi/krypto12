@@ -95,10 +95,10 @@ void aes_shift_rows(struct aes_t * aes) {
 	int i;
 	for(i=0;i<4; ++i) {
 		aes->iv[i] = (
-			(iv[(i+3)%4] & 0xff)  |
-			(  iv[(i+2)%4] & 0xff00) |
-			(  iv[(i+1)%4] & 0xff0000) |
-			(  iv[(i+0)%4] & 0xff000000)
+			(iv[(i)%4] & 0xff)  |
+			(  iv[(i+1)%4] & 0xff00) |
+			(  iv[(i+2)%4] & 0xff0000) |
+			(  iv[(i+3)%4] & 0xff000000)
 		);
 	}
 }

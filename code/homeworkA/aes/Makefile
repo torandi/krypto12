@@ -16,5 +16,8 @@ sh_colors.o: sh_colors.h sh_colors.c
 
 test: unit_test.o aes.o test.o sh_colors.o
 
+kattis: 
+	kattis -p oldkattis:aes main.c aes.h aes.c aes_constants.h
+
 clean:
 	rm *.o aes test 

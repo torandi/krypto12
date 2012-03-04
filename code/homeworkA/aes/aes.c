@@ -114,10 +114,10 @@ void aes_mix_columns(struct aes_t * aes) {
 		//Perform transform i Rijndael's Galois field
 		//mulitplication is done by lookup and addition by xor
 			
-		iv_out[i*4+3] = galois_2[iv[3]] ^ galois_3[iv[2]] ^ iv[1] ^ iv[0];
-		iv_out[i*4+2] = iv[3] ^ galois_2[iv[2]] ^ galois_3[iv[1]] ^ iv[0];
-		iv_out[i*4+1] = iv[3] ^ iv[2] ^ galois_2[iv[1]] ^ galois_3[iv[0]];
-		iv_out[i*4+0] = galois_3[iv[3]] ^ iv[2] ^ iv[1] ^ galois_2[iv[0]];
+		iv_out[i*4] = galois_2[iv[0]] ^ galois_3[iv[1]] ^ iv[2] ^ iv[3];
+		iv_out[i*4+1] = iv[0] ^ galois_2[iv[1]] ^ galois_3[iv[2]] ^ iv[3];
+		iv_out[i*4+2] = iv[0] ^ iv[1] ^ galois_2[iv[2]] ^ galois_3[iv[3]];
+		iv_out[i*4+3] = galois_3[iv[0]] ^ iv[1] ^ iv[2] ^ galois_2[iv[3]];
 
 		
 	}

@@ -67,9 +67,6 @@ int main() {
 			begin_test("Word = 0");
 			assert_ints_equal(aes_rot(0), 0);
 
-			begin_test("Word = (0x1A in msb)");
-			assert_ints_equal( aes_rot(0x1A<<24), 0x1a);
-			
 			begin_test("1D 2C 3A 4F");
 			uint32_t word;
 			uint32_t word_rot;

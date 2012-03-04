@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "aes.h"
 #include "unit_test.h"
@@ -7,37 +8,38 @@
 #include "test_data.h"
 
 int main() {
-	char hex1[32] = "00000000000000000000000000000000";
-	char hex2[32];
+	char hex1[33] = "00000000000000000000000000000000";
+	char hex2[33];
 	int i=0;
 
 	struct aes_t aes;
 
 	struct round_t test_round[10];
 	build_test_round(test_round);
-
 	//Execute test:
 	begin_test_suite();
+	
 		begin_context("Hex conversion");
 			begin_test("00000000000000000000000000000000");
 			string_to_data(hex1, aes.key);
 			data_to_string(aes.key, hex2);
-			assert_strings_equal_n(hex1, hex2,32);
+			assert_strings_equal_n(hex2,hex1,32);
 
 			begin_test("01010101010101010101010101010101");
 			sprintf(hex1, "01010101010101010101010101010101");
 			string_to_data(hex1, aes.key);
 			data_to_string(aes.key, hex2);
-			assert_strings_equal_n(hex1, hex2,32);
+			assert_strings_equal_n(hex2,hex1,32);
 			for(i=0;i<4; ++i) {
 				assert_ints_equal(aes.key[i], 0x01010101);
 			}
 
 			begin_test("ffffffffffffffffffffffffffffffffff");
-			sprintf(hex1, "ffffffffffffffffffffffffffffffffff");
+			sprintf(hex1, "ffffffffffffffffffffffffffffffff");
+			
 			string_to_data(hex1, aes.key);
 			data_to_string(aes.key, hex2);
-			assert_strings_equal_n(hex1, hex2,32);
+			assert_strings_equal_n(hex2, hex1,32);
 			for(i=0;i<4; ++i) {
 				assert_ints_equal(aes.key[i], 0xffffffff);
 			}
@@ -46,11 +48,21 @@ int main() {
 			sprintf(hex1, "000102030405060708090a0b0c0d0e0f");
 			string_to_data(hex1, aes.key);
 			data_to_string(aes.key, hex2);
-			assert_strings_equal_n(hex1, hex2,32);
+			assert_strings_equal_n(hex2, hex1,32);
 
+			begin_test("Byte order");
+			unsigned char  * b = (unsigned char*)aes.key;
+			memset(b, 0, 16);
+
+			for(i=0;i<16;++i) {
+				b[i] = i+1;
+			}
+			data_to_string(aes.key, hex1);
+			assert_strings_equal_n(hex1, "0102030405060708090a0b0c0d0e0f10",32);
 
 		end_context();
 
+		
 		begin_context("aes_rot");
 			begin_test("Word = 0");
 			assert_ints_equal(aes_rot(0), 0);
@@ -184,6 +196,7 @@ int main() {
 			data_to_string(aes.iv, hex1);
 			assert_strings_equal_n(hex1, "52e418cbb1be4949308b381691b109fe", 32);
 		end_context();
+		
 /*
 		printf("MixColums debug\n");
 		//sprintf(hex1, "d4bf5d30e0b452aeb84111f11e2798e5");
@@ -206,6 +219,7 @@ int main() {
 			}
 			printf("\n");
 		}
-*/
+		*/
 	end_test_suite();
+
 }

@@ -26,14 +26,14 @@ void aes_encrypt(struct aes_t * aes) {
 	aes_add_round_key(aes, 10);
 }
 
-void string_to_data(const char input[32], uint32_t * target) {
+void string_to_data(const char input[33], uint32_t * target) {
 	int i;
 	for(i=0;i<4; ++i) {
 		sscanf(input+i*8,"%8x", target+i);
 	}
 }
 
-void data_to_string(const uint32_t * data, char target[32]) {
+void data_to_string(const uint32_t * data, char target[33]) {
 	int i;
 	for(i=0;i<4; ++i) {
 		sprintf(target+(i*8), "%08x", data[i]);

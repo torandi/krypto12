@@ -87,7 +87,7 @@ void aes_sub_bytes(struct aes_t * aes) {
 
 void aes_shift_rows(struct aes_t * aes) {
 	uint32_t iv[4];
-	memcpy(iv,aes->iv,16);
+	memcpy(iv,aes->iv,16); //Make a copy
 	int i;
 	for(i=0;i<4; ++i) {
 		aes->iv[i] = (
@@ -98,9 +98,48 @@ void aes_shift_rows(struct aes_t * aes) {
 		);
 	}
 }
+void gmix_column(unsigned char *r) {
+        unsigned char a[4];
+        unsigned char b[4];
+        unsigned char c;
+        unsigned char h;
+        /* The array 'a' is simply a copy of the input array 'r'
+         * The array 'b' is each element of the array 'a' multiplied by 2
+         * in Rijndael's Galois field
+         * a[n] ^ b[n] is element n multiplied by 3 in Rijndael's Galois field */ 
+        for(c=0;c<4;c++) {
+                a[c] = r[c];
+                /* h is 0xff if the high bit of r[c] is set, 0 otherwise */
+                h = (unsigned char)((signed char)r[c] >> 7);
+                b[c] = r[c] << 1;
+                b[c] ^= 0x1B & h; /* Rijndael's Galois field */
+        }
+        r[0] = b[0] ^ a[3] ^ a[2] ^ b[1] ^ a[1]; /* 2 * a0 + a3 + a2 + 3 * a1 */
+        r[1] = b[1] ^ a[0] ^ a[3] ^ b[2] ^ a[2]; /* 2 * a1 + a0 + a3 + 3 * a2 */
+        r[2] = b[2] ^ a[1] ^ a[0] ^ b[3] ^ a[3]; /* 2 * a2 + a1 + a0 + 3 * a3 */
+        r[3] = b[3] ^ a[2] ^ a[1] ^ b[0] ^ a[0]; /* 2 * a3 + a2 + a1 + 3 * a0 */
+}
+
 
 void aes_mix_columns(struct aes_t * aes) {
+	unsigned char iv_out[16];
+	unsigned char i;
 
+	for(i=0;i<4; ++i) {
+		unsigned char * iv = (unsigned char*) (aes->iv+i);
+
+		//Perform transform i Rijndael's Galois field
+		//mulitplication is done by lookup and addition by xor
+			
+		iv_out[i*4+3] = galois_2[iv[3]] ^ galois_3[iv[2]] ^ iv[1] ^ iv[0];
+		iv_out[i*4+2] = iv[3] ^ galois_2[iv[2]] ^ galois_3[iv[1]] ^ iv[0];
+		iv_out[i*4+1] = iv[3] ^ iv[2] ^ galois_2[iv[1]] ^ galois_3[iv[0]];
+		iv_out[i*4+0] = galois_3[iv[3]] ^ iv[2] ^ iv[1] ^ galois_2[iv[0]];
+
+		
+	}
+
+	memcpy(aes->iv,iv_out,16);  //Copy output to iv
 }
 
 void aes_add_round_key(struct aes_t  * aes, int round) {

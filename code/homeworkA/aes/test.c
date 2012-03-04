@@ -109,16 +109,6 @@ int main() {
 			}
 		end_context();
 
-		sprintf(hex1, "0102030405060708090a0b0c0d0e0f10");
-		string_to_data(hex1, aes.iv);
-		for(i=0;i<4;++i) {
-			printf("%08x\n", aes.iv[i]);
-		}
-		printf("----\n");
-		aes_shift_rows(&aes);
-		for(i=0;i<4;++i) {
-			printf("%08x\n", aes.iv[i]);
-		}
 
 		begin_context("AES Step through");
 		{
@@ -193,7 +183,29 @@ int main() {
 			aes_encrypt(&aes);
 			data_to_string(aes.iv, hex1);
 			assert_strings_equal_n(hex1, "52e418cbb1be4949308b381691b109fe", 32);
-		
-
+		end_context();
+/*
+		printf("MixColums debug\n");
+		//sprintf(hex1, "d4bf5d30e0b452aeb84111f11e2798e5");
+		//sprintf(hex1, "d4d4d4d5010101010101010101010101");
+		sprintf(hex1, "d4d4d4d5c6c6c6c6c6c6c6c6c6c6c6c6");
+		string_to_data(hex1, aes.iv);
+		unsigned char * iv = (unsigned char *)aes.iv;
+		int j;
+		for(i=0;i<4;++i) {
+			for(j=0;j<4;++j) {
+				printf("%02x ", iv[j*4+(3-i)]);
+			}
+			printf("\n");
+		}
+		printf("----\n");
+		aes_mix_columns(&aes);
+		for(i=0;i<4;++i) {
+			for(j=0;j<4;++j) {
+				printf("%02x ", iv[j*4+3-i]);
+			}
+			printf("\n");
+		}
+*/
 	end_test_suite();
 }

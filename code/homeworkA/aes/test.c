@@ -171,5 +171,17 @@ int main() {
 			}
 			
 		end_context();
+
+		begin_context("Complete run");
+			begin_test("Kattis example data");
+			sprintf(hex1, "F4C020A0A1F604FD343FAC6A7E6AE0F9");
+			string_to_data(hex1, aes.key);
+			sprintf(hex1, "F295B9318B994434D93D98A4E449AFD8");
+			string_to_data(hex1, aes.iv);
+			aes_encrypt(&aes);
+			data_to_string(aes.iv, hex1);
+			assert_strings_equal_n(hex1, "52e418cbb1be4949308b381691b109fe", 32);
+		
+
 	end_test_suite();
 }

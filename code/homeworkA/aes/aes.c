@@ -7,6 +7,11 @@
 
 static uint32_t aes_sub_bytes_word(uint32_t word);
 
+void aes_encrypt(struct aes_t * aes) {
+
+}
+
+
 void string_to_data(const char input[32], uint32_t * target) {
 	int i;
 	for(i=0;i<4; ++i) {

@@ -13,6 +13,9 @@ void string_to_data(const char input[32], uint32_t * target);
 void data_to_string(const uint32_t * data, char target[32]);
 
 void aes_expand_key(struct aes_t * aes);
+
+void aes_encrypt(struct aes_t * aes);
+
 void aes_run_round(int round, struct aes_t * aes);
 
 void aes_add_round_key(struct aes_t * aes, int round);

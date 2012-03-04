@@ -16,8 +16,6 @@ void aes_expand_key(struct aes_t * aes);
 
 void aes_encrypt(struct aes_t * aes);
 
-void aes_run_round(int round, struct aes_t * aes);
-
 void aes_add_round_key(struct aes_t * aes, int round);
 void aes_sub_bytes(struct aes_t * aes);
 void aes_shift_rows(struct aes_t * aes);

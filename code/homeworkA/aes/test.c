@@ -109,7 +109,19 @@ int main() {
 			}
 		end_context();
 
+		sprintf(hex1, "0102030405060708090a0b0c0d0e0f10");
+		string_to_data(hex1, aes.iv);
+		for(i=0;i<4;++i) {
+			printf("%08x\n", aes.iv[i]);
+		}
+		printf("----\n");
+		aes_shift_rows(&aes);
+		for(i=0;i<4;++i) {
+			printf("%08x\n", aes.iv[i]);
+		}
+
 		begin_context("AES Step through");
+		{
 			string_to_data(test_key, aes.key);
 			string_to_data(test_plaintext, aes.iv);
 
@@ -127,7 +139,7 @@ int main() {
 				
 				sprintf(test_name, "Round %d: Verify round key", i+1);
 				begin_test(test_name);
-				data_to_string(aes.expanded_key+i*4, hex1);
+				data_to_string(aes.expanded_key+(i+1)*4, hex1);
 				assert_strings_equal_n(hex1, test_round[i].k_sch, 32);
 
 
@@ -169,7 +181,7 @@ int main() {
 					assert_strings_equal_n(hex1, test_output, 32);
 
 			}
-			
+		}	
 		end_context();
 
 		begin_context("Complete run");

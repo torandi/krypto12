@@ -8,9 +8,23 @@
 static uint32_t aes_sub_bytes_word(uint32_t word);
 
 void aes_encrypt(struct aes_t * aes) {
+	int i;
+	//Pre round
+	aes_expand_key(aes);
+	aes_add_round_key(aes, 0);
 
+	for(i=1;i<10;++i) {
+		//Normal round
+		aes_sub_bytes(aes);
+		aes_shift_rows(aes);
+		aes_mix_columns(aes);
+		aes_add_round_key(aes, i);
+	}
+	//Last round
+	aes_sub_bytes(aes);
+	aes_shift_rows(aes);
+	aes_add_round_key(aes, 10);
 }
-
 
 void string_to_data(const char input[32], uint32_t * target) {
 	int i;
@@ -72,9 +86,21 @@ void aes_sub_bytes(struct aes_t * aes) {
 }
 
 void aes_shift_rows(struct aes_t * aes) {
+	uint32_t iv[4];
+	memcpy(iv,aes->iv,16);
+	int i;
+	for(i=0;i<4; ++i) {
+		aes->iv[i] = (
+			(iv[(i+3)%4] & 0xff)  |
+			(  iv[(i+2)%4] & 0xff00) |
+			(  iv[(i+1)%4] & 0xff0000) |
+			(  iv[(i+0)%4] & 0xff000000)
+		);
+	}
 }
 
 void aes_mix_columns(struct aes_t * aes) {
+
 }
 
 void aes_add_round_key(struct aes_t  * aes, int round) {

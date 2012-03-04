@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include "aes.h"
-#include "unit_test.h"
+#include "../../unit_test.h"
 
 #include "test_data.h"
 

@@ -1,4 +1,5 @@
-CFLAGS = -g
+CFLAGS = -g -pg
+LDFLAGS = -pg
 
 all: aes test
 

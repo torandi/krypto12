@@ -48,7 +48,7 @@ void aes_expand_key(struct aes_t * aes) {
 	//First key is the original key
 	memcpy(aes->expanded_key,aes->key,16); 
 	//Expand for the rest of the keys
-	int32_t temp; //Temporary variable
+	uint32_t temp; //Temporary variable
 	for(i=4;i< 4*11;++i) {
 		temp = aes->expanded_key[i-1]; //Previous key column
 		if(i % 4 == 0) { //Start of new round key
@@ -69,7 +69,7 @@ uint32_t aes_rot(uint32_t word) {
  * Performs sub_bytes on a single word (byte for byte)
  */
 uint32_t aes_sub_bytes_word(uint32_t word) {
-	unsigned char * b=&word;
+	unsigned char * b=(unsigned char*)&word;
 	return (
 			( sbox[b[0]]  ) |
 			( sbox[b[1]] << 8 ) |

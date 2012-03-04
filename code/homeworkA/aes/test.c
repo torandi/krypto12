@@ -19,56 +19,74 @@ int main() {
 	//Execute test:
 	begin_test_suite();
 	
-		begin_context("Hex conversion");
-			begin_test("00000000000000000000000000000000");
-			string_to_data(hex1, aes.key);
-			data_to_string(aes.key, hex2);
-			assert_strings_equal_n(hex2,hex1,32);
+	begin_context("Hex conversion");
+		begin_test("00000000000000000000000000000000");
+		string_to_data(hex1, aes.key);
+		data_to_string(aes.key, hex2);
+		assert_strings_equal_n(hex2,hex1,32);
 
-			begin_test("01010101010101010101010101010101");
-			sprintf(hex1, "01010101010101010101010101010101");
-			string_to_data(hex1, aes.key);
-			data_to_string(aes.key, hex2);
-			assert_strings_equal_n(hex2,hex1,32);
-			for(i=0;i<4; ++i) {
-				assert_ints_equal(aes.key[i], 0x01010101);
-			}
+		begin_test("01010101010101010101010101010101");
+		sprintf(hex1, "01010101010101010101010101010101");
+		string_to_data(hex1, aes.key);
+		data_to_string(aes.key, hex2);
+		assert_strings_equal_n(hex2,hex1,32);
+		for(i=0;i<4; ++i) {
+			assert_ints_equal(aes.key[i], 0x01010101);
+		}
 
-			begin_test("ffffffffffffffffffffffffffffffffff");
-			sprintf(hex1, "ffffffffffffffffffffffffffffffff");
-			
-			string_to_data(hex1, aes.key);
-			data_to_string(aes.key, hex2);
-			assert_strings_equal_n(hex2, hex1,32);
-			for(i=0;i<4; ++i) {
-				assert_ints_equal(aes.key[i], 0xffffffff);
-			}
+		begin_test("ffffffffffffffffffffffffffffffffff");
+		sprintf(hex1, "ffffffffffffffffffffffffffffffff");
+		
+		string_to_data(hex1, aes.key);
+		data_to_string(aes.key, hex2);
+		assert_strings_equal_n(hex2, hex1,32);
+		for(i=0;i<4; ++i) {
+			assert_ints_equal(aes.key[i], 0xffffffff);
+		}
 
-			begin_test("000102030405060708090a0b0c0d0e0f");
-			sprintf(hex1, "000102030405060708090a0b0c0d0e0f");
-			string_to_data(hex1, aes.key);
-			data_to_string(aes.key, hex2);
-			assert_strings_equal_n(hex2, hex1,32);
+		begin_test("000102030405060708090a0b0c0d0e0f");
+		sprintf(hex1, "000102030405060708090a0b0c0d0e0f");
+		string_to_data(hex1, aes.key);
+		data_to_string(aes.key, hex2);
+		assert_strings_equal_n(hex2, hex1,32);
 
-			begin_test("Byte order");
-			unsigned char  * b = (unsigned char*)aes.key;
-			memset(b, 0, 16);
+		begin_test("Byte order");
+		unsigned char  * b = (unsigned char*)aes.key;
+		memset(b, 0, 16);
 
-			for(i=0;i<16;++i) {
-				b[i] = i+1;
-			}
-			data_to_string(aes.key, hex1);
-			assert_strings_equal_n(hex1, "0102030405060708090a0b0c0d0e0f10",32);
+		for(i=0;i<16;++i) {
+			b[i] = i+1;
+		}
+		data_to_string(aes.key, hex1);
+		assert_strings_equal_n(hex1, "0102030405060708090a0b0c0d0e0f10",32);
 
-		end_context();
-
+	end_context();
 		
 		begin_context("aes_rot");
+		{
 			begin_test("Word = 0");
 			assert_ints_equal(aes_rot(0), 0);
 
 			begin_test("Word = (0x1A in msb)");
 			assert_ints_equal( aes_rot(0x1A<<24), 0x1a);
+			
+			begin_test("1D 2C 3A 4F");
+			uint32_t word;
+			uint32_t word_rot;
+			unsigned char * w = (unsigned char*)&word;
+			unsigned char * wr = (unsigned char*)&word_rot;
+			w[0] = 0x1d;
+			w[1] = 0x2c;
+			w[2] = 0x3a;
+			w[3] = 0x4f;
+
+			wr[0] = w[1];
+			wr[1] = w[2];
+			wr[2] = w[3];
+			wr[3] = w[0];
+	
+			assert_ints_equal(aes_rot(word), word_rot);
+		}
 		end_context();
 
 		begin_context("aes_sub_bytes");
@@ -197,6 +215,7 @@ int main() {
 			assert_strings_equal_n(hex1, "52e418cbb1be4949308b381691b109fe", 32);
 		end_context();
 		
+
 /*
 		printf("MixColums debug\n");
 		//sprintf(hex1, "d4bf5d30e0b452aeb84111f11e2798e5");

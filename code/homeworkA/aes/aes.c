@@ -28,15 +28,18 @@ void aes_encrypt(struct aes_t * aes) {
 
 void string_to_data(const char input[33], uint32_t * target) {
 	int i;
-	for(i=0;i<4; ++i) {
-		sscanf(input+i*8,"%8x", target+i);
+	unsigned char * b = (unsigned char*)target;
+	for(i=0;i<16; ++i) {
+		unsigned char c;
+		sscanf(input+i*2,"%2x", (unsigned int*)(b+i));
 	}
 }
 
 void data_to_string(const uint32_t * data, char target[33]) {
 	int i;
-	for(i=0;i<4; ++i) {
-		sprintf(target+(i*8), "%08x", data[i]);
+	unsigned char * b = (unsigned char*)data;
+	for(i=0;i<16; ++i) {
+		sprintf(target+(i*2), "%02x", b[i]);
 	}
 }
 
@@ -49,7 +52,7 @@ void aes_expand_key(struct aes_t * aes) {
 	for(i=4;i< 4*11;++i) {
 		temp = aes->expanded_key[i-1]; //Previous key column
 		if(i % 4 == 0) { //Start of new round key
-			temp = aes_sub_bytes_word(aes_rot(temp)) ^ ( ((uint32_t)rcon[i/4]) << 24); 
+			temp = aes_sub_bytes_word(aes_rot(temp)) ^ ( ((uint32_t)rcon[i/4])); 
 		} 
 		aes->expanded_key[i] = aes->expanded_key[i-4] ^ temp; 
 	}
@@ -59,18 +62,19 @@ void aes_expand_key(struct aes_t * aes) {
  * Rotate word (a, b, c, d) to (b, c, d, a)
  */
 uint32_t aes_rot(uint32_t word) {
-	return ( word << 8 ) | ((word >> 24) & 0xff);
+	return ( word >> 8 ) | ((word & 0xff)<< 24);
 }
 
 /**
  * Performs sub_bytes on a single word (byte for byte)
  */
 uint32_t aes_sub_bytes_word(uint32_t word) {
+	unsigned char * b=&word;
 	return (
-			( sbox[(word >> 24) & 0xff] << 24 ) |
-			( sbox[(word >> 16) & 0xff] << 16 ) |
-			( sbox[(word >> 8) & 0xff] << 8 ) |
-			sbox[word & 0xff]
+			( sbox[b[0]]  ) |
+			( sbox[b[1]] << 8 ) |
+			( sbox[b[2]] << 16 ) |
+			( sbox[b[3]] << 24)
 		);
 }
 

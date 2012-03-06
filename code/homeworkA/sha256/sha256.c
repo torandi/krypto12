@@ -145,6 +145,12 @@ void sha256_padd_message(struct hash_t * hash) {
 	}
 
 	hash->message_length = hash->c_message_length/4; //Set message length (in number of uint32_t)
+
+	//Reverse the *@(#&*@$ byte order. GAAAH
+	for(i=0;	i<hash->message_length;++i) {
+		hash->message[i] = ntohl(hash->message[i]);
+	}
+
 }
 
 void sha256_compute_round(struct hash_t * hash, int n) {
@@ -159,14 +165,14 @@ void sha256_compute_round(struct hash_t * hash, int n) {
 	printf("\n=============== ROUND %d =================\n", n+1);
 	printf("Initial hash values:\n");
 	for(i=0;i<8;++i) {
-		printf("H[%d] = %08x\n", i, ntohl(hash->hash[i]));
+		printf("H[%d] = %08x\n", i, hash->hash[i]);
 	}
 	printf("\nBlock contents:\n");
 #endif
 
 #if DEBUG
 	for(i=0;i<16;++i)
-		printf("W[%d] = %08x\n", i, ntohl(W[i]));
+		printf("W[%d] = %08x\n", i, W[i]);
 #endif
 
 	for(i=16; i<64;++i) {
@@ -193,7 +199,8 @@ void sha256_compute_round(struct hash_t * hash, int n) {
 		tmp[0] = (T[0] + T[1]);
 
 #if DEBUG
-	printf("t=%2d: %08x %08x %08x %08x %08x %08x %08x %08x\n", i, ntohl(tmp[0]), ntohl(tmp[1]), ntohl(tmp[2]), ntohl(tmp[3]), ntohl(tmp[4]), ntohl(tmp[5]), ntohl(tmp[6]), ntohl(tmp[7]));
+	printf("t=%2d: %08x %08x %08x %08x %08x %08x %08x %08x\n", i,
+			tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], tmp[7]);
 #endif
 	}
 #if DEBUG
@@ -201,11 +208,11 @@ void sha256_compute_round(struct hash_t * hash, int n) {
 #endif
 	for(i=0;i<8; ++i) {
 #if DEBUG
-		printf("H[%d] = %08x + %08x = ", i, ntohl(hash->hash[i]), ntohl(tmp[i]));
+		printf("H[%d] = %08x + %08x = ", i, hash->hash[i], tmp[i]);
 #endif
 		hash->hash[i] += tmp[i];
 #if DEBUG
-		printf("%08x\n", ntohl(hash->hash[i]));
+		printf("%08x\n", hash->hash[i]);
 #endif
 	}
 }

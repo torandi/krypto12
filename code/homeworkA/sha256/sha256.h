@@ -49,8 +49,8 @@ void sha256_compute_round(struct hash_t * hash, int n); //n=round
  * Return values are 32-bit words
  */
 
-#define SHA256_SHR(x, n) ((x) << (n))
-#define SHA256_ROTR(x, n) (( (x) << (n) ) | ((x) >> (32-(n))))
+#define SHA256_SHR(x, n) ((x) >> (n))
+#define SHA256_ROTR(x, n) (( (x) >> (n) ) | ((x) << (32-(n))))
 
 #define SHA256_CH(x,y,z) (((x) & (y)) ^ ((~(x)) & (z)))
 #define SHA256_MAJ(x,y,z) (((x) & (y)) ^ ((x) & (z)) ^ ((y) & (z)))

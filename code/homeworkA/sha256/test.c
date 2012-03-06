@@ -73,6 +73,14 @@ int main() {
 
 		finalize_hash(&hash);
 
+		init_hash(&hash);
+
+		begin_test("Correct initial values");
+		to_string(&hash, test);
+		assert_strings_equal(test, "6a09e667bb67ae853c6ef372a54ff53a510e527f9b05688c1f83d9ab5be0cd19");
+		finalize_hash(&hash);
+
+
 	end_context();
 
 	begin_context("Message padding");
@@ -96,7 +104,7 @@ int main() {
 		}
 		
 		begin_test("abc: Data test: last  word");
-		assert_ints_equal(hash.message[15], 0x3000000);
+		assert_ints_equal(hash.message[15], 0x18000000);
 
 		finalize_hash(&hash);
 

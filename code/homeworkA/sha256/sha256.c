@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "sha256.h"
+#include "sha256_constants.h"
 
 
 /**
@@ -18,6 +19,11 @@ void init_hash(struct hash_t * target) {
 	target->c_message_length = 0;
 	target->c_hash = (unsigned char*)target->hash;
 
+	//Set initial hash values:
+	int i;
+	for(i=0;i<8;++i) {
+		target->hash[i] = ntohl(sha256_initial_values[i]);
+	}
 }
 
 /**
@@ -103,7 +109,7 @@ uint32_t rotr(uint32_t word, int n) {
  * Performs padding
  */
 void sha256_padd_message(struct hash_t * hash) {
-	uint64_t l_in_binary = (uint64_t) hash->c_message_length; //Get a 64-bit binary representation of message_length
+	uint64_t l_in_binary = (uint64_t) hash->c_message_length*8; //Get a 64-bit binary representation of message_length
 	unsigned char * l = (unsigned char *)&l_in_binary; //Char pointer to l, to be able to get the msb order
 
 	int k = (56-(hash->c_message_length+1))%64;  //Bytes to padd

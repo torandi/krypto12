@@ -12,11 +12,33 @@ int main() {
 	int i;
 
 
-	begin_context("rotr()");
+	begin_context("rotr() and shift");
 	{
-		uint32_t w = 0x01020304;
-		begin_test("0x01020304");
-		assert_ints_equal(SHA256_ROTR(w, 8), 0x04010203);
+		uint32_t w;
+		unsigned char *wc = (unsigned char*) &w;
+		wc[0] = 1;
+		wc[1] = 2;
+		wc[2] = 3;
+		wc[3] = 4;
+
+		begin_test("ROTR");
+		w = SHA256_ROTR(w, 8);
+		assert_ints_equal(wc[0], 4);
+		assert_ints_equal(wc[1], 1);
+		assert_ints_equal(wc[2], 2);
+		assert_ints_equal(wc[3], 3);
+
+		begin_test("SHR");
+		wc[0] = 1;
+		wc[1] = 2;
+		wc[2] = 3;
+		wc[3] = 4;
+		w = SHA256_SHR(w, 8);
+		assert_ints_equal(wc[0], 0);
+		assert_ints_equal(wc[1], 1);
+		assert_ints_equal(wc[2], 2);
+		assert_ints_equal(wc[3], 3);
+
 	}
 	end_context();
 

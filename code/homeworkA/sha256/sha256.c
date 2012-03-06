@@ -159,7 +159,7 @@ void sha256_compute_round(struct hash_t * hash, int n) {
 	printf("\n=============== ROUND %d =================\n", n+1);
 	printf("Initial hash values:\n");
 	for(i=0;i<8;++i) {
-		printf("H[%d] = %08x\n", ntohl(hash->hash[i]));
+		printf("H[%d] = %08x\n", i, ntohl(hash->hash[i]));
 	}
 	printf("\nBlock contents:\n");
 #endif
@@ -167,11 +167,10 @@ void sha256_compute_round(struct hash_t * hash, int n) {
 #if DEBUG
 	for(i=0;i<16;++i)
 		printf("W[%d] = %08x\n", i, ntohl(W[i]));
-	
 #endif
 
 	for(i=16; i<64;++i) {
-		W[i] = ( SHA256_LITTLE_SIGMA1(W[i-2]) + W[i-7] + SHA256_LITTLE_SIGMA0(W[i-15]) + W[i-16] );
+		W[i] = SHA256_LITTLE_SIGMA1(W[i-2]) + W[i-7] + SHA256_LITTLE_SIGMA0(W[i-15]) + W[i-16];
 	}
 
 	//Initialize the tmp variables:
@@ -182,7 +181,7 @@ void sha256_compute_round(struct hash_t * hash, int n) {
 #endif
 
 	for(i=0;i<64;++i) {
-		T[0] = (tmp[7] + SHA256_BIG_SIGMA1(tmp[4]) + SHA256_CH(tmp[4], tmp[5], tmp[6]) + W[i]);
+		T[0] = (tmp[7] + SHA256_BIG_SIGMA1(tmp[4]) + SHA256_CH(tmp[4], tmp[5], tmp[6]) + sha256_round_constants[i] +  W[i]);
 		T[1] = (SHA256_BIG_SIGMA0(tmp[0]) + SHA256_MAJ(tmp[0], tmp[1], tmp[2]));
 		tmp[7] = tmp[6];
 		tmp[6] = tmp[5];

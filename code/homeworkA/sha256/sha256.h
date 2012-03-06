@@ -43,29 +43,28 @@ void sha256_padd_message(struct hash_t * hash);
 void sha256_compute(struct hash_t * hash);
 void sha256_compute_round(struct hash_t * hash, int n); //n=round
 
-#define TWO_POW_32 4294967296
-
 /**
  * Macros for sha256
  * x,y,z are 32-bit words.
  * Return values are 32-bit words
  */
-#define SHA256_SHR(x, n) (x >> n)
-#define SHA256_ROTR(x, n) ( x >> n ) | (x << (32-n))
 
-#define SHA256_CH(x,y,z) (x & y) ^ (~x & y)
-#define SHA256_MAJ(x,y,z) (x & y) ^ (x & z) ^ (y & z)
+#define SHA256_SHR(x, n) ((x) << (n))
+#define SHA256_ROTR(x, n) (( (x) << (n) ) | ((x) >> (32-(n))))
+
+#define SHA256_CH(x,y,z) (((x) & (y)) ^ ((~(x)) & (z)))
+#define SHA256_MAJ(x,y,z) (((x) & (y)) ^ ((x) & (z)) ^ ((y) & (z)))
 
 #define SHA256_BIG_SIGMA0(x) \
-	SHA256_ROTR(x, 2) ^ SHA256_ROTR(x, 13) ^ SHA256_ROTR(x, 22)
+	(SHA256_ROTR(x, 2) ^ SHA256_ROTR(x, 13) ^ SHA256_ROTR(x, 22))
 
 #define SHA256_BIG_SIGMA1(x) \
-	SHA256_ROTR(x, 6) ^ SHA256_ROTR(x, 11) ^ SHA256_ROTR(x, 25)
+	(SHA256_ROTR(x, 6) ^ SHA256_ROTR(x, 11) ^ SHA256_ROTR(x, 25))
 
 #define SHA256_LITTLE_SIGMA0(x) \
-	SHA256_ROTR(x, 7) ^ SHA256_ROTR(x, 18) ^ SHA256_ROTR(x, 3)
+	(SHA256_ROTR(x, 7) ^ SHA256_ROTR(x, 18) ^ SHA256_SHR(x, 3))
 
 #define SHA256_LITTLE_SIGMA1(x) \
-	SHA256_ROTR(x, 17) ^ SHA256_ROTR(x, 19) ^ SHA256_ROTR(x, 10)
+	(SHA256_ROTR(x, 17) ^ SHA256_ROTR(x, 19) ^ SHA256_SHR(x, 10))
 
 #endif

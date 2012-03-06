@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define INITIAL_MESSAGE_SIZE 16
+#define INITIAL_MESSAGE_SIZE 64
 
 struct hash_t {
 	uint32_t * message;			//The message array
@@ -36,6 +36,7 @@ void finalize_hash(struct hash_t * target);
 void from_stdin(struct hash_t * target);
 void from_string(const char * input, struct hash_t * target);
 void to_string(const struct hash_t * data, char * target);
+void data_to_string(const unsigned char * data, unsigned int len, char * target);
 
 uint32_t rotr(uint32_t word, int n);
 void sha256_padd_message(struct hash_t * hash);

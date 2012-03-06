@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.1415926-2.2-0.9995.2 (TeX Live 2009/Debian) (format=xelatex 2011.10.26)  25 FEB 2012 21:25
+This is XeTeX, Version 3.1415926-2.2-0.9995.2 (TeX Live 2009/Debian) (format=xelatex 2011.10.26)  6 MAR 2012 21:45
 entering extended mode
  %&-line parsing enabled.
 **homeworkA.tex
@@ -149,7 +149,7 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <8> on input line 58.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 58.
-[4] (./krypto12B_plaintext) [5] (./krypto12C_plaintext [6]) [7]
+[4] (./krypto12B_plaintext) [5] (./krypto12C_plaintext [6]) [7] [8]
 (./homeworkA.aux) ) 
 Here is how much of TeX's memory you used:
  2377 strings out of 494665
@@ -160,4 +160,4 @@ Here is how much of TeX's memory you used:
  669 hyphenation exceptions out of 8191
  32i,7n,32p,741b,1408s stack positions out of 5000i,500n,10000p,200000b,50000s
 
-Output written on homeworkA.pdf (7 pages).
+Output written on homeworkA.pdf (8 pages).

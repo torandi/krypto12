@@ -140,6 +140,25 @@ int main() {
 	}	
 	end_context();
 
+	begin_context("Compression test");
+	{
+		init_hash(&hash);
+
+		from_string("616263", &hash); //ABC
+
+		char out[65];
+
+		sha256_compute(&hash);
+	
+		to_string(&hash,out);
+
+		begin_test("Test result");
+		assert_strings_equal(out, "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad");
+
+		finalize_hash(&hash);
+	}
+	end_context();
+
 	end_test_suite();
 
 }

@@ -6,6 +6,7 @@
 #include "sha256.h"
 #include "sha256_constants.h"
 
+#define DEBUG 1
 
 /**
  * Must be called on hash_t before it is used
@@ -108,7 +109,7 @@ uint32_t rotr(uint32_t word, int n) {
 void sha256_compute(struct hash_t * hash) {
 	sha256_padd_message(hash);
 	int i;
-	int N=hash->message_length/64;
+	int N=hash->message_length/16;
 	for(i=0;i<N;++i) {
 		sha256_compute_round(hash, i);
 	}
@@ -149,31 +150,63 @@ void sha256_padd_message(struct hash_t * hash) {
 void sha256_compute_round(struct hash_t * hash, int n) {
 	uint32_t T[2];
 	uint32_t tmp[8];
+	uint32_t W[64];
 	int i;
 
-	/**
-	 * Here I set W to M and then modify the parts of W that should be verified
-	 * This destroys the used data in the message, but after it will not be used after this,
-	 * so it doesn't matter
-	 */
-	uint32_t * W = hash->message+n*64;
+	memcpy(W, hash->message+n*16, 64); //Copy the 16 words for this message block into W
+
+#if DEBUG 
+	printf("\n=============== ROUND %d =================\n", n+1);
+	printf("Initial hash values:\n");
+	for(i=0;i<8;++i) {
+		printf("H[%d] = %08x\n", ntohl(hash->hash[i]));
+	}
+	printf("\nBlock contents:\n");
+#endif
+
+#if DEBUG
+	for(i=0;i<16;++i)
+		printf("W[%d] = %08x\n", i, ntohl(W[i]));
+	
+#endif
+
 	for(i=16; i<64;++i) {
-		W[i] = ( SHA256_LITTLE_SIGMA1(W[i-2]) + W[i-7] + SHA256_LITTLE_SIGMA0(W[i-15]) + W[i-16] )% TWO_POW_32;
+		W[i] = ( SHA256_LITTLE_SIGMA1(W[i-2]) + W[i-7] + SHA256_LITTLE_SIGMA0(W[i-15]) + W[i-16] );
 	}
 
 	//Initialize the tmp variables:
 	memcpy(tmp, hash->hash, 32);
 
+#if DEBUG
+	printf("\n\n");
+#endif
+
 	for(i=0;i<64;++i) {
-		T[0] = (tmp[7] + SHA256_BIG_SIGMA1(tmp[4]) + SHA256_CH(tmp[4], tmp[5], tmp[6]) + W[i]) % TWO_POW_32;
-		T[1] = (SHA256_BIG_SIGMA0(tmp[0]) + SHA256_MAJ(tmp[0], tmp[1], tmp[2])) % TWO_POW_32;
+		T[0] = (tmp[7] + SHA256_BIG_SIGMA1(tmp[4]) + SHA256_CH(tmp[4], tmp[5], tmp[6]) + W[i]);
+		T[1] = (SHA256_BIG_SIGMA0(tmp[0]) + SHA256_MAJ(tmp[0], tmp[1], tmp[2]));
 		tmp[7] = tmp[6];
 		tmp[6] = tmp[5];
 		tmp[5] = tmp[4];
-		tmp[4] = (tmp[3]+T[0]) % TWO_POW_32;
+		tmp[4] = (tmp[3]+T[0]);
 		tmp[3] = tmp[2];
 		tmp[2] = tmp[1];
 		tmp[1] = tmp[0];
-		tmp[0] = (T[0] + T[1]) % TWO_POW_32;
+		tmp[0] = (T[0] + T[1]);
+
+#if DEBUG
+	printf("t=%2d: %08x %08x %08x %08x %08x %08x %08x %08x\n", i, ntohl(tmp[0]), ntohl(tmp[1]), ntohl(tmp[2]), ntohl(tmp[3]), ntohl(tmp[4]), ntohl(tmp[5]), ntohl(tmp[6]), ntohl(tmp[7]));
+#endif
+	}
+#if DEBUG
+	printf("\n\n");
+#endif
+	for(i=0;i<8; ++i) {
+#if DEBUG
+		printf("H[%d] = %08x + %08x = ", i, ntohl(hash->hash[i]), ntohl(tmp[i]));
+#endif
+		hash->hash[i] += tmp[i];
+#if DEBUG
+		printf("%08x\n", ntohl(hash->hash[i]));
+#endif
 	}
 }

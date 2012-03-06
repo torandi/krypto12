@@ -41,7 +41,7 @@ void data_to_string(const unsigned char * data, unsigned int len, char * target)
 uint32_t rotr(uint32_t word, int n);
 void sha256_padd_message(struct hash_t * hash);
 void sha256_compute(struct hash_t * hash);
-void sha256_compute_round(struct hash * hash, int n); //n=round
+void sha256_compute_round(struct hash_t * hash, int n); //n=round
 
 #define TWO_POW_32 4294967296
 

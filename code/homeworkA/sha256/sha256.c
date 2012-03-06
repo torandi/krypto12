@@ -6,7 +6,7 @@
 #include "sha256.h"
 #include "sha256_constants.h"
 
-#define DEBUG 1
+#define DEBUG 0
 
 /**
  * Must be called on hash_t before it is used
@@ -16,9 +16,13 @@ void init_hash(struct hash_t * target) {
 	target->message = (uint32_t*) malloc(INITIAL_MESSAGE_SIZE);
 	target->c_message = (unsigned char*)target->message;
 	target->message_container_length = INITIAL_MESSAGE_SIZE;
+	target->c_hash = (unsigned char*)target->hash;
+	reinit_hash(target);
+}
+
+void reinit_hash(struct hash_t * target) {
 	target->message_length = 0;
 	target->c_message_length = 0;
-	target->c_hash = (unsigned char*)target->hash;
 
 	//Set initial hash values:
 	int i;
@@ -50,17 +54,22 @@ void finalize_hash(struct hash_t * target) {
 /**
  * Fills hash from stdin
  */
-void from_stdin(struct hash_t * target) {
+int from_stdin(struct hash_t * target) {
+	char c[2];
 	unsigned int l;
-	unsigned int r;
 	do {
-		r = scanf("%2x", &l);
-		if(r == 1) { //Filled one variable
+		c[0] = getchar();
+		if(c[0] == '\n') {
+			return 1;
+		} else if(c[0] != EOF) {
+			c[1] = getchar();
+			sscanf(c, "%2x", &l);
 			if(target->c_message_length == target->message_container_length)
 				resize_hash(target);
 			target->c_message[target->c_message_length++] = (unsigned char)l;
 		}
-	} while(r == 1 && !feof(stdin));
+	} while(c[0] != EOF);
+	return 0;
 }
 
 /**
@@ -85,14 +94,22 @@ void from_string(const char * input, struct hash_t * target) {
  * fills target with the hash in hex representation
  */
 void to_string(const struct hash_t * hash, char target[65]) {
-	return data_to_string(hash->c_hash, 32, target);
+	return data_to_string(hash->hash, 8, target);
 }
 
-void data_to_string(const unsigned char * data, unsigned int len, char * target) {
+void data_to_string(const uint32_t * data, unsigned int len, char * target) {
 	int i;
 	for(i=0; i<len;++i) {
-		sprintf(target+(i*2), "%02x", data[i]);
+		sprintf(target+(i*8), "%08x", data[i]);
 	}
+}
+
+void to_stdout(const struct hash_t * hash) {
+	int i;
+	for(i=0; i<8;++i) {
+		printf("%08x", hash->hash[i]);
+	}
+	printf("\n");
 }
 
 /*************************
@@ -107,7 +124,7 @@ uint32_t rotr(uint32_t word, int n) {
 }
 
 void sha256_compute(struct hash_t * hash) {
-	sha256_padd_message(hash);
+	//sha256_padd_message(hash);
 	int i;
 	int N=hash->message_length/16;
 	for(i=0;i<N;++i) {

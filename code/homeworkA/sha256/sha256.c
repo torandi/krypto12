@@ -22,7 +22,7 @@ void init_hash(struct hash_t * target) {
 	//Set initial hash values:
 	int i;
 	for(i=0;i<8;++i) {
-		target->hash[i] = ntohl(sha256_initial_values[i]);
+		target->hash[i] = sha256_initial_values[i];
 	}
 }
 
@@ -105,6 +105,15 @@ uint32_t rotr(uint32_t word, int n) {
 	return ( word >> n ) | (word << (32-n));
 }
 
+void sha256_compute(struct hash_t * hash) {
+	sha256_padd_message(hash);
+	int i;
+	int N=hash->message_length/64;
+	for(i=0;i<N;++i) {
+		sha256_compute_round(hash, i);
+	}
+}	
+
 /**
  * Performs padding
  */
@@ -125,12 +134,46 @@ void sha256_padd_message(struct hash_t * hash) {
 	//Append 1000 0000  = 0x80
 	hash->c_message[hash->c_message_length++] = 0x80;
 
-	bzero(hash->c_message+hash->c_message_length, k);
+	bzero(hash->c_message+hash->c_message_length, k); //Add k bytes of 0
 	hash->c_message_length+=k;
+
+	//Add reversed byte order of l_in_binary
 	int i=0;
 	for(i=0;i<8;++i) {
 		hash->c_message[hash->c_message_length++] = l[7-i];
 	}
 
 	hash->message_length = hash->c_message_length/4; //Set message length (in number of uint32_t)
+}
+
+void sha256_compute_round(struct hash_t * hash, int n) {
+	uint32_t T[2];
+	uint32_t tmp[8];
+	int i;
+
+	/**
+	 * Here I set W to M and then modify the parts of W that should be verified
+	 * This destroys the used data in the message, but after it will not be used after this,
+	 * so it doesn't matter
+	 */
+	uint32_t * W = hash->message+n*64;
+	for(i=16; i<64;++i) {
+		W[i] = ( SHA256_LITTLE_SIGMA1(W[i-2]) + W[i-7] + SHA256_LITTLE_SIGMA0(W[i-15]) + W[i-16] )% TWO_POW_32;
+	}
+
+	//Initialize the tmp variables:
+	memcpy(tmp, hash->hash, 32);
+
+	for(i=0;i<64;++i) {
+		T[0] = (tmp[7] + SHA256_BIG_SIGMA1(tmp[4]) + SHA256_CH(tmp[4], tmp[5], tmp[6]) + W[i]) % TWO_POW_32;
+		T[1] = (SHA256_BIG_SIGMA0(tmp[0]) + SHA256_MAJ(tmp[0], tmp[1], tmp[2])) % TWO_POW_32;
+		tmp[7] = tmp[6];
+		tmp[6] = tmp[5];
+		tmp[5] = tmp[4];
+		tmp[4] = (tmp[3]+T[0]) % TWO_POW_32;
+		tmp[3] = tmp[2];
+		tmp[2] = tmp[1];
+		tmp[1] = tmp[0];
+		tmp[0] = (T[0] + T[1]) % TWO_POW_32;
+	}
 }

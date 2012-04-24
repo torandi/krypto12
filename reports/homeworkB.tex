@@ -12,6 +12,8 @@
 \titleextra{Study group: Meidi Tõnisson, Lovisa Skeppe}
 \course{DD2448}
 
+\def\leg[#1]#2{\left(\frac{#1}{#2}\right) }
+
 \begin{document}
 	\maketitle
 
@@ -26,8 +28,13 @@
 		But (2) gives us that $CS$ is secure, even under these circumstances, so therefore $CS^2$ is sematically secure.
 
 	\subsection*{1b. Semantical security of $CS^{k(n)}$}
-		Using the same method as in 1a it is not hard to see that $CS^{k(n)}$ is sematical secure if $O(k(n)*p) \ge O(p)$, which boils down to $k(n) \gt 1$. But for numbers less than 1 the definition of $CS^k$ doesn't make any sense anyway, so $CS^{k(n)}$ is secure for any polynom k(n).
+		Using the same method as in 1a it is not hard to see that $CS^{k(n)}$ is sematical 
+		secure if $O(k(n)*p) \ge O(p)$, which boils down to $k(n) \ge 1$. 
+		But for numbers less than 1 the definition of $CS^k$ doesn't make any sense anyway, so $CS^{k(n)}$ is secure for any polynom k(n).
 
+
+	\section*{3.}
+	$\leg[a]{p}$
 
 
 \end{document}

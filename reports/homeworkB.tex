@@ -1,0 +1,33 @@
+\documentclass[a4paper,11pt]{article}
+
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+\usepackage[english, english]{babel}
+\usepackage{parskip}
+
+\usepackage{rapportfram}
+
+\author{Andreas Tarandi\\890416-0317}
+\title{Homework B}
+\titleextra{Study group: Meidi Tõnisson, Lovisa Skeppe}
+\course{DD2448}
+
+\begin{document}
+	\maketitle
+
+	\section*{1. CS = (Gen, Enc, Dec)}
+		(1) Sematical security is defined as the infeasability of a computational bound adversary to find any significant information about the message given the cryptotext and public key. \\
+		(2) This includes the attack where the adversary generates ciphertexts using random plaintext messages and the public key.
+	
+	\subsection*{1a. Semantical security of $CS^2$}
+		$CS^2$ could be seen as simply running $CS$ multiple times, since that is what it actually does. 
+		Let the complexity of getting any information from $CS$ be $O(p)$ where p is a polynom and $O(p)$ is above what can possibly be caluculated (that is, $CS$ is sematically secure). 
+		But then the complexity of $CS^2$ should be $O(2p) = O(p)$. This assumes that it doesn't get easier to get any information from a crypto system if one is given multiple ciphertexts encrypted with the same public key.
+		But (2) gives us that $CS$ is secure, even under these circumstances, so therefore $CS^2$ is sematically secure.
+
+	\subsection*{1b. Semantical security of $CS^{k(n)}$}
+		Using the same method as in 1a it is not hard to see that $CS^{k(n)}$ is sematical secure if $O(k(n)*p) \ge O(p)$, which boils down to $k(n) \gt 1$. But for numbers less than 1 the definition of $CS^k$ doesn't make any sense anyway, so $CS^{k(n)}$ is secure for any polynom k(n).
+
+
+
+\end{document}

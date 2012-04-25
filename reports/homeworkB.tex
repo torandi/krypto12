@@ -12,7 +12,7 @@
 \titleextra{Study group: Meidi Tõnisson, Lovisa Skeppe}
 \course{DD2448}
 
-\def\leg[#1]#2{\left(\frac{#1}{#2}\right) }
+\def\lag[#1]#2{\left(\frac{#1}{#2}\right) }
 
 \begin{document}
 	\maketitle
@@ -34,7 +34,32 @@
 
 
 	\section*{3.}
-	$\leg[a]{p}$
-
+	\subsection*{$\lag[27]{83}$}
+		(1) 83 is a prime number, therefore $\lag[27]{83}$ is a Legendre symbol\\
+		(2) Yes\\
+		(3) $\lag[27]{83} = -\lag[83]{27} = -\lag[2]{27} = -(-1) = 1$\\
+		Final result: 1 
+	\subsection*{$\lag[13]{82}$}
+		This is not a Legendre or Jacobi symbol since they are undefined for even nominators.
+	\subsection*{$\lag[35]{15}$}
+		(1) 15 is not a prime number, therefore it is a Jacobi symbol\\
+		(2) Yes\\
+		(3) $\lag[35]{15] = \lag[35 mod 15 = 5]{15} = \lag[5]{15} = \lag[15]{5} = \lag[0]{5} = 0$\\
+		Final result: 0
+	\subsection*{$\lag[6348523590]{737}$}
+		(1) Jacobi symbol since 737 is a non-prime odd number.\\\
+		(2) Yes\\\
+		(3) $\lag[6348523590]{737} = \lag[2]{737}*\lag[3]{737}^2*\lag[5]{737}*\lag{150833}[737] = 1 * \lag[737]{5} * \lag[737]{3}^2 * \lag[1500833]{737} = 
+			\lag[2]{5}*\lag[2]{7}^2 * \lag[1500833]{11} * \lag[1500833]{67} = -1 * \lag[4]{11} * \lag[33]{67} = 
+			-1 * \lag[11]{4} * \lag[67]{33} = -1 * \lag[3]{4}*\lag[1]{33} = -1 * 1 * \lag[1]{3} * \lag[1]{11} = -1 * 1 * 1 = -1$\\
+			Final result: -1 
+	\subsection*{$\lag[737]{23554359843}$}
+		(1) Jacobi, 23554359843 i a odd non-prime.\\
+		(2) Yes. \\
+		(3) $\lag[737]{23554359843} = \lag[737]{3} * \lag[737]{7} * \lag[737]{17}*\lag[737]{1607}*\lag[737]{41057} = 
+		\lag[2]{3} * \lag[2]{7} * \lag{6}[7] * \lag[6]{17} * \lag[1607]{737}*\lag[41057]{737} = 
+		-1 * -1 * -1 * 1 * -1 * \lag[133]{737}*\lag[522]{737}
+		 
+		
 
 \end{document}

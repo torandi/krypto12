@@ -1,0 +1,49 @@
+\documentclass[a4paper,11pt]{article}
+
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+\usepackage[english, english]{babel}
+\usepackage{parskip}
+
+\usepackage{rapportfram}
+
+\author{Andreas Tarandi\\890416-0317}
+\title{Homework C}
+\titleextra{Study group: Peter Boström}
+\course{DD2448}
+
+\begin{document}
+	\maketitle
+
+	\section*{1. }
+		\subsection*{a) DH implies DL}
+			Assume there exists an adversary $A_{DL}$ such that
+			$ A_{DL}(g, y) = log_g{y} ] $, that is that the DL-assumption does not hold.
+		
+			If we choose $g^x$ as $y$ then $A_{DL}(g, g^x) = log_g{g^x} = x$
+
+			But then we can write the DH-adversary as $A_{DH}(g^a, g^b) = g^{ab} = g^{a log_g{g^b}} = g^{a * A_{DL}(g, g^b)} $, that is as a function of the DL-adversary. 
+
+			But then since we in (1) assumed that $A_{DL}$ exists, $A_{DH}$ will also exist.
+
+			This means that if the DL-implication does not hold, then neither does the DH-implication: $\neg DL \to \neg DH $. 
+
+			We can then apply the rule of transposition ($\neg P \to \neg Q \vdash Q \to P$) and we have $DH \to DL$ \\
+			\\
+			Q.E.D.
+			
+	\subsection*{b) DDH implies DH }
+		
+	Assume there exists an adversary $A_{DH}$ such that $ A_{DH}(g^a, g^b) = g^{ab}$, that is, the DH-assumption does not hold. (2)
+
+	Then if we create an DDH-adversary $A_{DDH}(a, b, c}) = (c == A_{DH}{a, b)$,
+	we can distinguish between the probability distribution for $Pr [ A_{DDH}(g^a, g^b, g^{ab}) = 1] $ from the one for $ Pr [ A_{DDH}(g^a, g^b, g^c) = 1 ] $, meaning that DDH-does not hold.
+
+	We have that $\neg DH \to \neg DDH$, and by one again applying the rule of transposition we get $DDH \to DH$. \\
+	\\
+	Q.E.D.
+
+		 
+		
+
+\end{document}

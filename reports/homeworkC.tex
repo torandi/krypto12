@@ -113,7 +113,7 @@
 	
 	In 3a we proved that $ ord_N(a) = lcm(ord_p(a), ord_q(a)) $, so
 	$ord_p(a) = p-1 $ and $ord_q(a) = q-1$ (6) \\
-	holds iff (5) is true.
+	holds iff there exists such elements as in (5).
 
 	But $Z^*_p$ and $Z^*_q$ are both cyclic groups of order $p-1$ and $q-1$,
 	so they must contain at least one element that generates the group, 
@@ -123,6 +123,23 @@
 	Q.E.D.
 
 	\subsection*{c) }
+
+	\section*{5. }
+
+	\subsection*{b) }
+	Assume that the RSA assumption does not hold. That is, given a random cipher text and
+	public key it is easy to find the plaintext.
+	
+	In the strong RSA assumption we are allowed to choose a public exponent. But since it was
+	easy to find the plaintext given any random public key, it will also be easy to find
+	it if we are allowed to choose a public key. We could even randomize the exponent
+	and then use the same method we used for solving the the RSA problem.
+
+	Thus we have $\neg $ RSA assumption $ \imp \neg $ strong RSA assumption\\
+	and just as in 1) we can use the rule of transposition to get\\
+	strong RSA assumption $ \imp $ RSA assumption\\
+
+	Q.E.D.
 
 	\section*{6. }
 	If we assume that we just wish to forge a signature on any message other than the authentic

@@ -9,7 +9,7 @@
 
 \author{Andreas Tarandi\\890416-0317}
 \title{Homework C}
-\titleextra{Study group: Peter Boström}
+\titleextra{Study group: Peter Boström and Meidi Tönisson}
 \course{DD2448}
 
 \begin{document}
@@ -18,7 +18,7 @@
 	\section*{1. }
 		\subsection*{a) DH implies DL}
 			Assume there exists an adversary $A_{DL}$ such that
-			$ A_{DL}(g, y) = log_g{y} ] $, that is that the DL-assumption does not hold.
+			$ A_{DL}(g, y) = log_g{y} $, that is that the DL-assumption does not hold.
 		
 			If we choose $g^x$ as $y$ then $A_{DL}(g, g^x) = log_g{g^x} = x$
 
@@ -36,12 +36,52 @@
 		
 	Assume there exists an adversary $A_{DH}$ such that $ A_{DH}(g^a, g^b) = g^{ab}$, that is, the DH-assumption does not hold. (2)
 
-	Then if we create an DDH-adversary $A_{DDH}(a, b, c}) = (c == A_{DH}{a, b)$,
+	Then if we create an DDH-adversary $A_{DDH} (a, b, c) = (c == A_{DH} (a, b)$,
 	we can distinguish between the probability distribution for $Pr [ A_{DDH}(g^a, g^b, g^{ab}) = 1] $ from the one for $ Pr [ A_{DDH}(g^a, g^b, g^c) = 1 ] $, meaning that DDH-does not hold.
 
 	We have that $\neg DH \to \neg DDH$, and by one again applying the rule of transposition we get $DDH \to DH$. \\
 	\\
 	Q.E.D.
+
+	\section*{2. }
+
+	\subsection*{a)}
+
+	$ \psi(g^a, g^b) = \psi(g, g)^{ab}$ (1)\\
+	$ \psi(g^1, g^c) = \psi(g, g)^{1*c}$ (2)\\
+	Since we know that $\psi(g, g) \neq 1$ we can just compare the result from (1) and (2) to determine the outcome. 
+	Therefore the Diffie-Hellman decision problem is when using the map.
+
+	\subsection*{b) }
+	In a generalized three party Diffie-Hellman key exchange using the map each part would 
+	start by sending $g$ raised to his exponent to the two other parts.
+
+	Each part will then have his own exponent and $g$ raised to the two others separatly.
+	If he then inputs the two values from the other parts into the map an raises the output
+	to his own exponend he will have the secret key.
+
+	Example: (A's calculations):\\
+	$ \psi(g^b, g^c)^a = \psi(g, g)^{bca} = \psi(g, g)^{abc} $
+
+	\subsection*{c) }
+	The decision Diffie-Hellman problem under which our scheme would be secure is as follows:
+	In a group $G$ of prime order $p$ with generator $g$ and $a, b, c, d \in Z_q$ randomly chosen then for every polynomial time algorithm $A$\\
+	$|Pr [ A(g^a, g^b, g^c, g^{abc} = 1 ] - Pr [ A(g^a, g^b, g^c, g^d) = 1] | $ is negligible.
+
+	\subsection*{d) }
+	Assume that a man-in-the-middle intercepts all traffic between the parts. He would have a
+	own private exponent and have a separate key for each channel to the parts. For each channel
+	he recives a public value ($g^x$, $x \in {a, b}$) and then sends one of the other parts public value ($g^y$, $y \in {a,b}$, $y \neq x$) and his own public value($g^z$). 
+	The key for that channel then becomes $\psi(g^x, g^y)^z$. Using this techique all the parts
+	will be under the assumption that they communicate with each other while they in fact are
+	communicating through a fourth part.
+
+	One thing that might tell the parts that something is wrong is if all the communication 
+	comes from the same IP-address, so the man-in-the-middle would probably have to use two
+	separatly adresses.
+
+
+
 
 		 
 		

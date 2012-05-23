@@ -81,7 +81,57 @@
 	separatly adresses.
 
 
+	\section*{3. }
+	\subsection*{a) }
+	
+	The chinese remainder theorem gives that given a group $Z^*_N$ with $N=pq$ we have
+	$Z^*_N \cong Z^*_p \times Z^*_q$.
 
+	The identity in the direct product of two groups $G$ and $H$ are $(1_G, 1_H)$, in our
+	case $(1, 1)$.
+
+	The order of an element in the direct product must be a multiple of
+	the order of both the sub elements since they need to be identity when raised to the
+	order of the composit element. The smallest number fullfulling this is the lcm of
+	both the orders.
+	This is also one of the elementary properties of the direct product of two groups.
+
+	Thus $ ord_N(a) = lcm(ord_p(a), ord_q(a)) $.
+
+	O.E.D.
+
+	\subsection*{b) }
+	Given\\
+	$gcd(p-1, q-1) = d$ (1)\\
+	$\phi(N) = (p-1)(q-1)$ (2)\\
+	Then we shall prove the following:
+	$ord_N(a) = \frac{\phi(N)}{d}$ (3)\\
+	Substitute (1) and (2) into (3):\\
+	$ ord_N(a) = \frac{(p-1)(q-1)}{gcd(p-1, q-1)} $\\ 
+	But $ a*b = gcd(a, b) * lcm(a, b)$ (4) \\
+	so $ ord_N(a) = \frac{gcd(p-1, q-1)*lcm(p-1, q-1)}{gcd(p-1, q-1)} = lcm(p-1, q-1)$ (5)\\
+	
+	In 3a we proved that $ ord_N(a) = lcm(ord_p(a), ord_q(a)) $, so
+	$ord_p(a) = p-1 $ and $ord_q(a) = q-1$ (6) \\
+	holds iff (5) is true.
+
+	But $Z^*_p$ and $Z^*_q$ are both cyclic groups of order $p-1$ and $q-1$,
+	so they must contain at least one element that generates the group, 
+	and thus having order $p-1$ resp. $q-1$. Since $Z^*_N$ is isomorphic to $Z^*_p \times Z^*_q$,
+	it will contain this element, making (6) true, and therefore also (5) and in turn (3).
+
+	Q.E.D.
+
+	\subsection*{c) }
+
+	\section*{6. }
+	If we assume that we just wish to forge a signature on any message other than the authentic
+	messages (existential forgery), and consider the case where the messages just differ from 
+	each other with one single bit (per unique message). We will then need at least three 
+	messages to be able to forge a forth different from the other two.
+
+	We would then save the parts of the private key we recive in the signature and map
+	them to the corresponding bit-value in the message.
 
 		 
 		

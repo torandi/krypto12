@@ -150,6 +150,26 @@
 	We would then save the parts of the private key we recive in the signature and map
 	them to the corresponding bit-value in the message.
 
+	If we instead would wish to perform an selective forgery, that is signing any message
+	of our own choice, we would need the whole key. The key consist of 512 numbers, of which
+	the first 256 is revealed in the first signature. If we then assume that each message
+	will differ from the other in about half the bits we will get an exponential decreasing
+	number of bits each time. This gives us the following revealed bits:\\
+	$256 + 128 + 64 + 32 + 16 + 8 + 4 + 2 + 1 + 1= 511$\\
+	So following this reasoning we would be lacking just one bit after nine messages, so we
+	can estimate that given ten messages we will probalisticaly have the key, We can assume
+	this to be the average case.
+
+	If we instead consider the worst case senario we will only get one extra bit for every
+	new message after the first one. If would then take 257 message until we have the full
+	key. This is the upper bound.
+
+	In the best case scenario the two first messages will differ in all the bits, and thus
+	we will have the full key after only two messages.
+
+	Summarizing we would need at most 257 messages, on average 10 messages and at least two
+	messages to get the full key.
+
 		 
 		
 

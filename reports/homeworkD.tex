@@ -31,4 +31,23 @@
 
 		So based on this assumption the above proof shows that the hash function is collision resistant.
 
+	\section*{2. }
+		For this we need to prove that
+		$P[A(K) = (M, M') \wedge M \neq M' \wedge f_K(M) = f_K(M')$ is negligible.\\
+		To do this I will consider the adversaries that can possibly generate the pair $(M, M')$. The first alternative is as in 1), to
+		add a multiple of the order of $g_i$ to $m_i$, but as proved in 1) this is infeasable. 
+		The other alternative is as follows:\\
+		For each $m_i \in M$ the hash function $f_K$ generates a value $g_i^{m_i}$. Each of these value are then multiplied to get the
+		final hash value, so if we could find $(m'_i, m'_j), i \neq j$ such that $m'_i = log_{g_i}(g_j^{m_j}), m'_j = log_{g_j}(g_i^{m_i})$ 
+		we would get the same final hash. \\
+		($g_i^{m_i} = g_j^{log_{g_j}(g_i^{m_i})}$)\\
+
+		A variant of the second alternative would be to move factors of one of the factors to another (ie $a = g_i^{m_i} = cd, b = g_j^{m_j}$ and
+		change $m_i$ and $m_j$ such that $a = c$ and $b = b*d$, but to do that one would have to calculate $log_{g_i}(d)$ and $log_{g_j}(d)$ both.
+
+		Thus alternative one is unfeasable, and both variants of alternative two depends on the ability to calculate the discrete logarithm
+		in <g>, but that was hard, so thus the hash is collision resistant.
+
+
+			
 \end{document}

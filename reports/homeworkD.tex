@@ -1,0 +1,27 @@
+\documentclass[a4paper,11pt]{article}
+
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+\usepackage[english, english]{babel}
+\usepackage{parskip}
+
+\usepackage{rapportfram}
+
+\author{Andreas Tarandi\\890416-0317}
+\title{Homework D}
+\titleextra{Study group: }
+\course{DD2448}
+
+\begin{document}
+	\maketitle
+
+	\section*{1. }
+		To be collision resistant the following must hold:\\
+		For all polynomial time adveraries A:
+		$P[A(g, N) = (x, x') \wedge x \neq x' \wedge g^x mod N = g^{x'} mod N]$ is negligible\\
+		That is, there exist no A that can find $x$ and $x'$ that are not equal for which\\
+		$g^x \equiv g^{x'} mod N$\\
+		which gives $x' = x + ord(g)k$, $k \in Z$.\\
+		So finding a collision becomes as hard as finding the order of g
+
+\end{document}

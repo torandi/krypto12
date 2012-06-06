@@ -22,6 +22,13 @@
 		That is, there exist no A that can find $x$ and $x'$ that are not equal for which\\
 		$g^x \equiv g^{x'} mod N$\\
 		which gives $x' = x + ord(g)k$, $k \in Z$.\\
-		So finding a collision becomes as hard as finding the order of g
+		So finding a collision becomes as hard as finding the order of g, so if we can make the assumption that finding ord(g) of an element $g \in pq$ where p and q are safe primes then this proof would be done.
+
+		There are basicaly two ways of finding the order of an element $g \in G$. The first one is the trivial method, that is calculating
+		$g^1, g^2, ... g^k$ until $g^k = 1$, which is unfeasable if ord(G) is large. \\
+		The second one requires us to know (or easily find) the prime decomposition of ord(G), which we can assume we don't, and thus the 
+		assumption that finding ord(g) is hard is reasonable.
+
+		So based on this assumption the above proof shows that the hash function is collision resistant.
 
 \end{document}

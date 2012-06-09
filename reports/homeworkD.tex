@@ -55,9 +55,9 @@
 			\subsubsection*{$x$}
 				Irreducible.
 			\subsubsection*{$x^5 + x^2 + x + 1$}
-				Reducible to $(x - 1)*(x^4 + x^3 + x^2 + 1)$
+				Reducible to $(x + 1)*(x^4 + x^3 + x^2 + 1)$
 			\subsubsection*{$x^3 + 1$}
-				Reducible to $(x - 1)(x^2 + x + 1)$
+				Reducible to $(x + 1)(x^2 + x + 1)$
 			\subsubsection*{$x^7 + x^6 + 1$}
 				Irreducible.\\
 				Does not contain any linear- or quadratic factors. To be reducible it must contain factors such that:\\
@@ -105,11 +105,15 @@
 
 		\subsection*{3b}
 			All calculations are in $Z_2[x]$\\
-			\subsubsection{$(x^5+x+1)(x^3+x^2+1)$}
+			\subsubsection*{$(x^5+x+1)(x^3+x^2+1)$}
 				$(x^5+x+1)(x^3+x^2+1) = x^8 + x^7 + x^5 + x^4 + x^2 + x + 1$
 				Reducing this by $x^6 + x + 1$ gives the remainder $x^5 + x^4 + x^3 + x + 1$ which is also the result of the calculation.
 
-				\subsubsection{ }
+			\subsubsection*{$(x+1)^{-1}$ }
+				Dividing $(x+1)$ into $(x^6 + x + 1)$ gives $1$ as remainder and $(x^5 + x^4 + x^3 +x^2 + x )$ as quotient, 
+				so multiplying the quotient with $(x+1)$ in this field would yield 1, thus it is the inverse.
+
+				$(x+1)^{-1} = (x^5 + x^4 + x^3 +x^2 + x)$
 
 			
 \end{document}

@@ -17,12 +17,12 @@
 
 	\section*{1 }
 		To be collision resistant the following must hold:\\
-		For all polynomial time adveraries A:
+		For all polynomial time adveraries A:\\
 		$P[A(g, N) = (x, x') \wedge x \neq x' \wedge g^x mod N = g^{x'} mod N]$ is negligible\\
 		That is, there exist no A that can find $x$ and $x'$ that are not equal for which\\
 		$g^x \equiv g^{x'} mod N$\\
 		which gives $x' = x + ord(g)k$, $k \in Z$.\\
-		So finding a collision becomes as hard as finding the order of g, so if we can make the assumption that finding ord(g) of an element $g \in pq$ where p and q are safe primes then this proof would be done.
+		So finding a collision becomes as hard as finding the order of g, so if we can make the assumption that finding ord(g) of an element $g \in Z_{pq}$ where p and q are safe primes then this proof would be done.
 
 		There are basicaly two ways of finding the order of an element $g \in G$. The first one is the trivial method, that is calculating
 		$g^1, g^2, ... g^k$ until $g^k = 1$, which is unfeasable if ord(G) is large. \\
@@ -71,14 +71,45 @@
 				(6) $EG + DH + CJ = 0$\\
 				(7) $EH + DJ = 0$\\
 				(8) $EJ = 1$\\
-			
+		
+				(1) and (8) gives us $A = F = E = J = 1$\\
+
+				This transforms the expressions (2)-(7) to:\\
+				(Results from the preceding calculations are used)\\
+
+				(2)	$B + G = 1$\\
+						$B = G + 1$\\
+				(3)	$C + BG + H = 0$\\
+						$C + (G+1)G = H $\\
+						$C = H + G^2 + G = H + G+G = H$\\
+						$C = H$\\
+				(4)	$D + CG + (G+1)H + 1 = 0$\\
+						$D + HG + GH+H = 1$\\
+						$D + H = 1$\\
+						$D = H + 1$\\
+				(5)	$1 + DG + CH + B = 0$\\
+						$(H + 1)G + H^2 + G + 1 = 1$\\
+						$HG + G + H + G = 0$\\
+						$HG + H = 0$\\
+						$GH = H$\\
+				(6)	$G + DH + C = 0$\\
+						$G + (H+1)H + H = 0$\\
+						$G + H + H + H = 0$\\
+						$G + H = 0$\\
+						$G = H$\\
+				(7)	$H + D = 0$\\
+						$H = D$\\
+
+				But then (7) and (4) contradicts each other, and this can not hold, thus the
+				polynomial is irreducible.
+
 		\subsection*{3b}
 			All calculations are in $Z_2[x]$\\
 			\subsubsection{$(x^5+x+1)(x^3+x^2+1)$}
 				$(x^5+x+1)(x^3+x^2+1) = x^8 + x^7 + x^5 + x^4 + x^2 + x + 1$
 				Reducing this by $x^6 + x + 1$ gives the remainder $x^5 + x^4 + x^3 + x + 1$ which is also the result of the calculation.
 
-			\subsubsection{ 
+				\subsubsection{ }
 
 			
 \end{document}
